@@ -17,7 +17,7 @@ namespace FOS\UserBundle\Model;
  */
 interface GroupInterface
 {
-    public function addRole(string $role): self;
+    public function addRole(string $role);
 
     /**
      * @return mixed

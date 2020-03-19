@@ -122,7 +122,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function addRole(string $role): self
+    public function addRole(string $role)
     {
         $role = strtoupper($role);
         if ($role === static::ROLE_DEFAULT) {
@@ -335,7 +335,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function removeRole(string $role): self
+    public function removeRole(string $role)
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -348,7 +348,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setUsername(string $username): self
+    public function setUsername(string $username)
     {
         $this->username = $username;
 
@@ -358,7 +358,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setUsernameCanonical(string $usernameCanonical): self
+    public function setUsernameCanonical(string $usernameCanonical)
     {
         $this->usernameCanonical = $usernameCanonical;
 
@@ -368,7 +368,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setSalt(?string $salt): self
+    public function setSalt(?string $salt)
     {
         $this->salt = $salt;
 
@@ -378,7 +378,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setEmail(string $email): self
+    public function setEmail(string $email)
     {
         $this->email = $email;
 
@@ -388,7 +388,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setEmailCanonical(string $emailCanonical): self
+    public function setEmailCanonical(string $emailCanonical)
     {
         $this->emailCanonical = $emailCanonical;
 
@@ -398,7 +398,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setEnabled(bool $boolean): self
+    public function setEnabled(bool $boolean)
     {
         $this->enabled = (bool) $boolean;
 
@@ -408,7 +408,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setPassword(string $password): self
+    public function setPassword(string $password)
     {
         $this->password = $password;
 
@@ -418,7 +418,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setSuperAdmin(bool $boolean): self
+    public function setSuperAdmin(bool $boolean)
     {
         if (true === $boolean) {
             $this->addRole(static::ROLE_SUPER_ADMIN);
@@ -432,7 +432,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setPlainPassword(string $password): self
+    public function setPlainPassword(string $password)
     {
         $this->plainPassword = $password;
 
@@ -442,7 +442,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setLastLogin(DateTime $time = null): self
+    public function setLastLogin(DateTime $time = null)
     {
         $this->lastLogin = $time;
 
@@ -452,7 +452,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setConfirmationToken(string $confirmationToken): self
+    public function setConfirmationToken(string $confirmationToken)
     {
         $this->confirmationToken = $confirmationToken;
 
@@ -462,7 +462,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setPasswordRequestedAt(DateTime $date = null): self
+    public function setPasswordRequestedAt(DateTime $date = null)
     {
         $this->passwordRequestedAt = $date;
 
@@ -489,7 +489,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setRoles(array $roles): self
+    public function setRoles(array $roles)
     {
         $this->roles = [];
 
@@ -532,7 +532,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function addGroup(GroupInterface $group): self
+    public function addGroup(GroupInterface $group)
     {
         if (!$this->getGroups()->contains($group)) {
             $this->getGroups()->add($group);
@@ -544,7 +544,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function removeGroup(GroupInterface $group): self
+    public function removeGroup(GroupInterface $group)
     {
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);

@@ -90,7 +90,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function removeRole($role): self
+    public function removeRole($role)
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -103,7 +103,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function setName($name): self
+    public function setName($name)
     {
         $this->name = $name;
 
@@ -113,7 +113,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function setRoles(array $roles): self
+    public function setRoles(array $roles)
     {
         $this->roles = $roles;
 
