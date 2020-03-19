@@ -201,7 +201,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -217,7 +217,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function getSalt(): string
+    public function getSalt(): ?string
     {
         return $this->salt;
     }
@@ -225,7 +225,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -241,7 +241,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -249,7 +249,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function getPlainPassword(): string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
@@ -278,9 +278,8 @@ abstract class User implements BaseUserInterface, GroupableInterface
         $roles = $this->roles;
 
         foreach ($this->getGroups() as $group) {
-            $roles[] = $group->getRoles();
+            $roles = array_merge($roles, $group->getRoles());
         }
-        $roles = array_merge([], ...$roles);
 
         // we need to make sure to have at least one role
         $roles[] = static::ROLE_DEFAULT;
@@ -369,7 +368,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setSalt(string $salt): self
+    public function setSalt(?string $salt): self
     {
         $this->salt = $salt;
 
@@ -557,7 +556,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function isEqualTo(BaseUser $user): bool
+    public function isEqualTo($user): bool
     {
         if (!$user instanceof self) {
             return false;

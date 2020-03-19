@@ -92,7 +92,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function updateUser(User $user, $andFlush = true): void
+    public function updateUser(User $user, $andFlush = true)
     {
         $this->updateCanonicalFields($user);
         $this->updatePassword($user);

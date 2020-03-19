@@ -77,7 +77,7 @@ class FlashListener implements EventSubscriberInterface
         $this->session->getFlashBag()->add('success', $this->trans(self::$successMessages[$eventName]));
     }
 
-    private function trans(string $message, array $params = []): string
+    private function trans(string $message, array $params = []): ?string
     {
         return $this->translator->trans($message, $params, 'FOSUserBundle');
     }

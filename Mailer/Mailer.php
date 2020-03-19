@@ -82,11 +82,10 @@ class Mailer implements MailerInterface
     }
 
     /**
-     * @param string $renderedTemplate
      * @param array|string $fromEmail
      * @param array|string $toEmail
      */
-    protected function sendEmailMessage(string $renderedTemplate, $fromEmail, $toEmail): void
+    protected function sendEmailMessage(?string $renderedTemplate, $fromEmail, $toEmail): void
     {
         // Render the email, use the first line as the subject, and the rest as the body
         $renderedLines = explode("\n", trim($renderedTemplate));

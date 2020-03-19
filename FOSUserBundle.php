@@ -40,7 +40,7 @@ class FOSUserBundle extends Bundle
         $this->addRegisterMappingsPass($container);
     }
 
-    private function addRegisterMappingsPass(ContainerBuilder $container)
+    private function addRegisterMappingsPass(ContainerBuilder $container): void
     {
         $mappings = [
             realpath(__DIR__.'/Resources/config/doctrine-mapping') => 'FOS\UserBundle\Model',

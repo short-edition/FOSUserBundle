@@ -16,9 +16,9 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use InvalidArgumentException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Executes some manipulations on the users.
