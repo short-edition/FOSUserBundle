@@ -12,16 +12,22 @@
 namespace FOS\UserBundle\Tests\Mailer;
 
 use FOS\UserBundle\Mailer\TwigSwiftMailer;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Swift_Events_EventDispatcher;
 use Swift_Mailer;
+use Swift_RfcComplianceException;
 use Swift_Transport_NullTransport;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class TwigSwiftMailerTest extends TestCase
 {
     /**
      * @dataProvider goodEmailProvider
      */
-    public function testSendConfirmationEmailMessageWithGoodEmails($emailAddress)
+    public function testSendConfirmationEmailMessageWithGoodEmails($emailAddress): void
     {
         $mailer = $this->getTwigSwiftMailer();
         $mailer->sendConfirmationEmailMessage($this->getUser($emailAddress));
@@ -31,9 +37,9 @@ class TwigSwiftMailerTest extends TestCase
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException \Swift_RfcComplianceException
+     * @expectedException Swift_RfcComplianceException
      */
-    public function testSendConfirmationEmailMessageWithBadEmails($emailAddress)
+    public function testSendConfirmationEmailMessageWithBadEmails($emailAddress): void
     {
         $mailer = $this->getTwigSwiftMailer();
         $mailer->sendConfirmationEmailMessage($this->getUser($emailAddress));
@@ -42,7 +48,7 @@ class TwigSwiftMailerTest extends TestCase
     /**
      * @dataProvider goodEmailProvider
      */
-    public function testSendResettingEmailMessageWithGoodEmails($emailAddress)
+    public function testSendResettingEmailMessageWithGoodEmails($emailAddress): void
     {
         $mailer = $this->getTwigSwiftMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
@@ -52,15 +58,15 @@ class TwigSwiftMailerTest extends TestCase
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException \Swift_RfcComplianceException
+     * @expectedException Swift_RfcComplianceException
      */
-    public function testSendResettingEmailMessageWithBadEmails($emailAddress)
+    public function testSendResettingEmailMessageWithBadEmails($emailAddress): void
     {
         $mailer = $this->getTwigSwiftMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
     }
 
-    public function goodEmailProvider()
+    public function goodEmailProvider(): array
     {
         return [
             ['foo@example.com'],
@@ -70,7 +76,7 @@ class TwigSwiftMailerTest extends TestCase
         ];
     }
 
-    public function badEmailProvider()
+    public function badEmailProvider(): array
     {
         return [
             ['foo'],
@@ -78,15 +84,15 @@ class TwigSwiftMailerTest extends TestCase
         ];
     }
 
-    private function getTwigSwiftMailer()
+    private function getTwigSwiftMailer(): TwigSwiftMailer
     {
         return new TwigSwiftMailer(
             new Swift_Mailer(
                 new Swift_Transport_NullTransport(
-                    $this->getMockBuilder('Swift_Events_EventDispatcher')->getMock()
+                    $this->getMockBuilder(Swift_Events_EventDispatcher::class)->getMock()
                 )
             ),
-            $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock(),
+            $this->getMockBuilder(UrlGeneratorInterface::class)->getMock(),
             $this->getTwigEnvironment(),
             [
                 'template' => [
@@ -101,9 +107,9 @@ class TwigSwiftMailerTest extends TestCase
         );
     }
 
-    private function getTwigEnvironment()
+    private function getTwigEnvironment(): Environment
     {
-        return new \Twig\Environment(new \Twig\Loader\ArrayLoader(['foo' => <<<'TWIG'
+        return new Environment(new ArrayLoader(['foo' => <<<'TWIG'
 {% block subject 'foo' %}
 
 {% block body_text %}Test{% endblock %}
@@ -112,25 +118,23 @@ TWIG
         ]));
     }
 
-    private function getUser($emailAddress)
+    private function getUser($emailAddress): MockObject
     {
-        $user = $this->getMockBuilder('FOS\UserBundle\Model\UserInterface')->getMock();
+        $user = $this->getMockBuilder(User::class)->getMock();
         $user->method('getEmail')
-            ->willReturn($emailAddress)
-        ;
+            ->willReturn($emailAddress);
 
         return $user;
     }
 
-    private function getEmailAddressValueObject($emailAddressAsString)
+    private function getEmailAddressValueObject($emailAddressAsString): MockObject
     {
         $emailAddress = $this->getMockBuilder('EmailAddress')
-           ->setMethods(['__toString'])
-           ->getMock();
+            ->setMethods(['__toString'])
+            ->getMock();
 
         $emailAddress->method('__toString')
-            ->willReturn($emailAddressAsString)
-        ;
+            ->willReturn($emailAddressAsString);
 
         return $emailAddress;
     }

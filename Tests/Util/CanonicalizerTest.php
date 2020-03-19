@@ -22,7 +22,7 @@ class CanonicalizerTest extends TestCase
      * @param $source
      * @param $expectedResult
      */
-    public function testCanonicalize($source, $expectedResult)
+    public function testCanonicalize($source, $expectedResult): void
     {
         $canonicalizer = new Canonicalizer();
         $this->assertSame($expectedResult, $canonicalizer->canonicalize($source));
@@ -31,7 +31,7 @@ class CanonicalizerTest extends TestCase
     /**
      * @return array
      */
-    public function canonicalizeProvider()
+    public function canonicalizeProvider(): array
     {
         return [
             [null, null],

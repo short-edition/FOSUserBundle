@@ -16,7 +16,7 @@ use FOS\UserBundle\Tests\TestGroup;
 
 class GroupFormTypeTest extends TypeTestCase
 {
-    public function testSubmit()
+    public function testSubmit(): void
     {
         $group = new TestGroup('foo');
 
@@ -31,13 +31,10 @@ class GroupFormTypeTest extends TypeTestCase
         $this->assertSame('bar', $group->getName());
     }
 
-    /**
-     * @return array
-     */
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return array_merge(parent::getTypes(), [
-            new GroupFormType('FOS\UserBundle\Tests\TestGroup'),
+            new GroupFormType(TestGroup::class),
         ]);
     }
 }

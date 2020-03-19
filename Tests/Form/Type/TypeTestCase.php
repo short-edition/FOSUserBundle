@@ -24,7 +24,7 @@ use Symfony\Component\Form\Test\TypeTestCase as BaseTypeTestCase;
  */
 abstract class TypeTestCase extends BaseTypeTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,18 +37,12 @@ abstract class TypeTestCase extends BaseTypeTestCase
         $this->builder = new FormBuilder(null, null, $this->dispatcher, $this->factory);
     }
 
-    /**
-     * @return array
-     */
-    protected function getTypeExtensions()
+    protected function getTypeExtensions(): array
     {
         return [];
     }
 
-    /**
-     * @return array
-     */
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return [];
     }

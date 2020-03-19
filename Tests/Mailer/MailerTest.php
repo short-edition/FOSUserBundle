@@ -12,16 +12,20 @@
 namespace FOS\UserBundle\Tests\Mailer;
 
 use FOS\UserBundle\Mailer\Mailer;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Swift_Events_EventDispatcher;
 use Swift_Mailer;
+use Swift_RfcComplianceException;
 use Swift_Transport_NullTransport;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MailerTest extends TestCase
 {
     /**
      * @dataProvider goodEmailProvider
      */
-    public function testSendConfirmationEmailMessageWithGoodEmails($emailAddress)
+    public function testSendConfirmationEmailMessageWithGoodEmails($emailAddress): void
     {
         $mailer = $this->getMailer();
         $mailer->sendConfirmationEmailMessage($this->getUser($emailAddress));
@@ -31,9 +35,9 @@ class MailerTest extends TestCase
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException \Swift_RfcComplianceException
+     * @expectedException Swift_RfcComplianceException
      */
-    public function testSendConfirmationEmailMessageWithBadEmails($emailAddress)
+    public function testSendConfirmationEmailMessageWithBadEmails($emailAddress): void
     {
         $mailer = $this->getMailer();
         $mailer->sendConfirmationEmailMessage($this->getUser($emailAddress));
@@ -42,7 +46,7 @@ class MailerTest extends TestCase
     /**
      * @dataProvider goodEmailProvider
      */
-    public function testSendResettingEmailMessageWithGoodEmails($emailAddress)
+    public function testSendResettingEmailMessageWithGoodEmails($emailAddress): void
     {
         $mailer = $this->getMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
@@ -52,15 +56,15 @@ class MailerTest extends TestCase
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException \Swift_RfcComplianceException
+     * @expectedException Swift_RfcComplianceException
      */
-    public function testSendResettingEmailMessageWithBadEmails($emailAddress)
+    public function testSendResettingEmailMessageWithBadEmails($emailAddress): void
     {
         $mailer = $this->getMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
     }
 
-    public function goodEmailProvider()
+    public function goodEmailProvider(): array
     {
         return [
             ['foo@example.com'],
@@ -70,7 +74,7 @@ class MailerTest extends TestCase
         ];
     }
 
-    public function badEmailProvider()
+    public function badEmailProvider(): array
     {
         return [
             ['foo'],
@@ -78,15 +82,15 @@ class MailerTest extends TestCase
         ];
     }
 
-    private function getMailer()
+    private function getMailer(): Mailer
     {
         return new Mailer(
             new Swift_Mailer(
                 new Swift_Transport_NullTransport(
-                    $this->getMockBuilder('\Swift_Events_EventDispatcher')->getMock()
+                    $this->getMockBuilder(Swift_Events_EventDispatcher::class)->getMock()
                 )
             ),
-            $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock(),
+            $this->getMockBuilder(UrlGeneratorInterface::class)->getMock(),
             $this->getTemplating(),
             [
                 'confirmation.template' => 'foo',
@@ -99,35 +103,30 @@ class MailerTest extends TestCase
         );
     }
 
-    private function getTemplating()
+    private function getTemplating(): MockObject
     {
-        $templating = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface')
+        return $this->getMockBuilder(Environment::class)
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
-
-        return $templating;
+            ->getMock();
     }
 
-    private function getUser($emailAddress)
+    private function getUser($emailAddress): MockObject
     {
-        $user = $this->getMockBuilder('FOS\UserBundle\Model\UserInterface')->getMock();
+        $user = $this->getMockBuilder(User::class)->getMock();
         $user->method('getEmail')
-            ->willReturn($emailAddress)
-        ;
+            ->willReturn($emailAddress);
 
         return $user;
     }
 
-    private function getEmailAddressValueObject($emailAddressAsString)
+    private function getEmailAddressValueObject($emailAddressAsString): MockObject
     {
         $emailAddress = $this->getMockBuilder('EmailAddress')
-           ->setMethods(['__toString'])
-           ->getMock();
+            ->setMethods(['__toString'])
+            ->getMock();
 
         $emailAddress->method('__toString')
-            ->willReturn($emailAddressAsString)
-        ;
+            ->willReturn($emailAddressAsString);
 
         return $emailAddress;
     }

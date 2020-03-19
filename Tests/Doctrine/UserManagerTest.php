@@ -11,51 +11,57 @@
 
 namespace FOS\UserBundle\Tests\Doctrine;
 
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use FOS\UserBundle\Doctrine\UserManager;
 use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Util\CanonicalFieldsUpdater;
+use FOS\UserBundle\Util\PasswordUpdaterInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 
 class UserManagerTest extends TestCase
 {
-    const USER_CLASS = 'FOS\UserBundle\Tests\Doctrine\DummyUser';
+    public const USER_CLASS = DummyUser::class;
 
     /** @var UserManager */
     protected $userManager;
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var PHPUnit_Framework_MockObject_MockObject */
     protected $om;
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var PHPUnit_Framework_MockObject_MockObject */
     protected $repository;
 
-    public function setUp()
+    public function setUp(): void
     {
-        if (!interface_exists('Doctrine\Common\Persistence\ObjectManager')) {
+        if (!interface_exists(ObjectManager::class)) {
             $this->markTestSkipped('Doctrine Common has to be installed for this test to run.');
         }
 
-        $passwordUpdater = $this->getMockBuilder('FOS\UserBundle\Util\PasswordUpdaterInterface')->getMock();
-        $fieldsUpdater = $this->getMockBuilder('FOS\UserBundle\Util\CanonicalFieldsUpdater')
+        $passwordUpdater = $this->getMockBuilder(PasswordUpdaterInterface::class)->getMock();
+        $fieldsUpdater = $this->getMockBuilder(CanonicalFieldsUpdater::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $class = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
-        $this->om = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
-        $this->repository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+        $class = $this->getMockBuilder(ClassMetadata::class)->getMock();
+        $this->om = $this->getMockBuilder(ObjectManager::class)->getMock();
+        $this->repository = $this->getMockBuilder(ObjectRepository::class)->getMock();
 
         $this->om->expects($this->any())
             ->method('getRepository')
             ->with($this->equalTo(static::USER_CLASS))
-            ->will($this->returnValue($this->repository));
+            ->willReturn($this->repository);
         $this->om->expects($this->any())
             ->method('getClassMetadata')
             ->with($this->equalTo(static::USER_CLASS))
-            ->will($this->returnValue($class));
+            ->willReturn($class);
         $class->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(static::USER_CLASS));
+            ->willReturn(static::USER_CLASS);
 
         $this->userManager = new UserManager($passwordUpdater, $fieldsUpdater, $this->om, static::USER_CLASS);
     }
 
-    public function testDeleteUser()
+    public function testDeleteUser(): void
     {
         $user = $this->getUser();
         $this->om->expects($this->once())->method('remove')->with($this->equalTo($user));
@@ -64,27 +70,27 @@ class UserManagerTest extends TestCase
         $this->userManager->deleteUser($user);
     }
 
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $this->assertSame(static::USER_CLASS, $this->userManager->getClass());
     }
 
-    public function testFindUserBy()
+    public function testFindUserBy(): void
     {
         $crit = ['foo' => 'bar'];
-        $this->repository->expects($this->once())->method('findOneBy')->with($this->equalTo($crit))->will($this->returnValue([]));
+        $this->repository->expects($this->once())->method('findOneBy')->with($this->equalTo($crit))->willReturn([]);
 
         $this->userManager->findUserBy($crit);
     }
 
-    public function testFindUsers()
+    public function testFindUsers(): void
     {
-        $this->repository->expects($this->once())->method('findAll')->will($this->returnValue([]));
+        $this->repository->expects($this->once())->method('findAll')->willReturn([]);
 
         $this->userManager->findUsers();
     }
 
-    public function testUpdateUser()
+    public function testUpdateUser(): void
     {
         $user = $this->getUser();
         $this->om->expects($this->once())->method('persist')->with($this->equalTo($user));

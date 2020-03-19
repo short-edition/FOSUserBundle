@@ -15,11 +15,12 @@ use FOS\UserBundle\Command\PromoteUserCommand;
 use FOS\UserBundle\Util\UserManipulator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class PromoteUserCommandTest extends TestCase
 {
-    public function testExecute()
+    public function testExecute(): void
     {
         $commandTester = $this->createCommandTester($this->getManipulator('user', 'role', false));
         $exitCode = $commandTester->execute([
@@ -34,20 +35,20 @@ class PromoteUserCommandTest extends TestCase
         $this->assertRegExp('/Role "role" has been added to user "user"/', $commandTester->getDisplay());
     }
 
-    public function testExecuteInteractiveWithQuestionHelper()
+    public function testExecuteInteractiveWithQuestionHelper(): void
     {
         $application = new Application();
 
-        $helper = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
+        $helper = $this->getMockBuilder(QuestionHelper::class)
             ->setMethods(['ask'])
             ->getMock();
 
         $helper->expects($this->at(0))
             ->method('ask')
-            ->will($this->returnValue('user'));
+            ->willReturn('user');
         $helper->expects($this->at(1))
             ->method('ask')
-            ->will($this->returnValue('role'));
+            ->willReturn('role');
 
         $application->getHelperSet()->set($helper, 'question');
 
@@ -64,7 +65,7 @@ class PromoteUserCommandTest extends TestCase
     /**
      * @return CommandTester
      */
-    private function createCommandTester(UserManipulator $manipulator, Application $application = null)
+    private function createCommandTester(UserManipulator $manipulator, Application $application = null): void
     {
         if (null === $application) {
             $application = new Application();
@@ -88,7 +89,7 @@ class PromoteUserCommandTest extends TestCase
      */
     private function getManipulator($username, $role, $super)
     {
-        $manipulator = $this->getMockBuilder('FOS\UserBundle\Util\UserManipulator')
+        $manipulator = $this->getMockBuilder(UserManipulator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,14 +98,14 @@ class PromoteUserCommandTest extends TestCase
                 ->expects($this->once())
                 ->method('promote')
                 ->with($username)
-                ->will($this->returnValue(true))
+                ->willReturn(true)
             ;
         } else {
             $manipulator
                 ->expects($this->once())
                 ->method('addRole')
                 ->with($username, $role)
-                ->will($this->returnValue(true))
+                ->willReturn(true)
             ;
         }
 

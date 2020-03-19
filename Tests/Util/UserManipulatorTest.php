@@ -12,15 +12,21 @@
 namespace FOS\UserBundle\Tests\Util;
 
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Tests\TestUser;
 use FOS\UserBundle\Util\UserManipulator;
+use InvalidArgumentException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class UserManipulatorTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $user = new TestUser();
 
         $username = 'test_username';
@@ -31,12 +37,12 @@ class UserManipulatorTest extends TestCase
 
         $userManagerMock->expects($this->once())
             ->method('createUser')
-            ->will($this->returnValue($user));
+            ->willReturn($user);
 
         $userManagerMock->expects($this->once())
             ->method('updateUser')
-            ->will($this->returnValue($user))
-            ->with($this->isInstanceOf('FOS\UserBundle\Tests\TestUser'));
+            ->willReturn($user)
+            ->with($this->isInstanceOf(TestUser::class));
 
         $eventDispatcherMock = $this->getEventDispatcherMock(FOSUserEvents::USER_CREATED, true);
 
@@ -52,9 +58,9 @@ class UserManipulatorTest extends TestCase
         $this->assertSame($superadmin, $user->isSuperAdmin());
     }
 
-    public function testActivateWithValidUsername()
+    public function testActivateWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $username = 'test_username';
 
         $user = new TestUser();
@@ -63,13 +69,13 @@ class UserManipulatorTest extends TestCase
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue($user))
+            ->willReturn($user)
             ->with($this->equalTo($username));
 
         $userManagerMock->expects($this->once())
             ->method('updateUser')
-            ->will($this->returnValue($user))
-            ->with($this->isInstanceOf('FOS\UserBundle\Tests\TestUser'));
+            ->willReturn($user)
+            ->with($this->isInstanceOf(TestUser::class));
 
         $eventDispatcherMock = $this->getEventDispatcherMock(FOSUserEvents::USER_ACTIVATED, true);
 
@@ -83,16 +89,16 @@ class UserManipulatorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      */
-    public function testActivateWithInvalidUsername()
+    public function testActivateWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $invalidusername = 'invalid_username';
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue(null))
+            ->willReturn(null)
             ->with($this->equalTo($invalidusername));
 
         $userManagerMock->expects($this->never())
@@ -106,9 +112,9 @@ class UserManipulatorTest extends TestCase
         $manipulator->activate($invalidusername);
     }
 
-    public function testDeactivateWithValidUsername()
+    public function testDeactivateWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $username = 'test_username';
 
         $user = new TestUser();
@@ -117,13 +123,13 @@ class UserManipulatorTest extends TestCase
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue($user))
+            ->willReturn($user)
             ->with($this->equalTo($username));
 
         $userManagerMock->expects($this->once())
             ->method('updateUser')
-            ->will($this->returnValue($user))
-            ->with($this->isInstanceOf('FOS\UserBundle\Tests\TestUser'));
+            ->willReturn($user)
+            ->with($this->isInstanceOf(TestUser::class));
 
         $eventDispatcherMock = $this->getEventDispatcherMock(FOSUserEvents::USER_DEACTIVATED, true);
 
@@ -137,16 +143,16 @@ class UserManipulatorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      */
-    public function testDeactivateWithInvalidUsername()
+    public function testDeactivateWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $invalidusername = 'invalid_username';
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue(null))
+            ->willReturn(null)
             ->with($this->equalTo($invalidusername));
 
         $userManagerMock->expects($this->never())
@@ -160,9 +166,9 @@ class UserManipulatorTest extends TestCase
         $manipulator->deactivate($invalidusername);
     }
 
-    public function testPromoteWithValidUsername()
+    public function testPromoteWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $username = 'test_username';
 
         $user = new TestUser();
@@ -171,13 +177,13 @@ class UserManipulatorTest extends TestCase
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue($user))
+            ->willReturn($user)
             ->with($this->equalTo($username));
 
         $userManagerMock->expects($this->once())
             ->method('updateUser')
-            ->will($this->returnValue($user))
-            ->with($this->isInstanceOf('FOS\UserBundle\Tests\TestUser'));
+            ->willReturn($user)
+            ->with($this->isInstanceOf(TestUser::class));
 
         $eventDispatcherMock = $this->getEventDispatcherMock(FOSUserEvents::USER_PROMOTED, true);
 
@@ -191,16 +197,16 @@ class UserManipulatorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      */
-    public function testPromoteWithInvalidUsername()
+    public function testPromoteWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $invalidusername = 'invalid_username';
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue(null))
+            ->willReturn(null)
             ->with($this->equalTo($invalidusername));
 
         $userManagerMock->expects($this->never())
@@ -214,9 +220,9 @@ class UserManipulatorTest extends TestCase
         $manipulator->promote($invalidusername);
     }
 
-    public function testDemoteWithValidUsername()
+    public function testDemoteWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $username = 'test_username';
 
         $user = new TestUser();
@@ -225,13 +231,13 @@ class UserManipulatorTest extends TestCase
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue($user))
+            ->willReturn($user)
             ->with($this->equalTo($username));
 
         $userManagerMock->expects($this->once())
             ->method('updateUser')
-            ->will($this->returnValue($user))
-            ->with($this->isInstanceOf('FOS\UserBundle\Tests\TestUser'));
+            ->willReturn($user)
+            ->with($this->isInstanceOf(TestUser::class));
 
         $eventDispatcherMock = $this->getEventDispatcherMock(FOSUserEvents::USER_DEMOTED, true);
 
@@ -245,16 +251,16 @@ class UserManipulatorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      */
-    public function testDemoteWithInvalidUsername()
+    public function testDemoteWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $invalidusername = 'invalid_username';
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue(null))
+            ->willReturn(null)
             ->with($this->equalTo($invalidusername));
 
         $userManagerMock->expects($this->never())
@@ -268,9 +274,9 @@ class UserManipulatorTest extends TestCase
         $manipulator->demote($invalidusername);
     }
 
-    public function testChangePasswordWithValidUsername()
+    public function testChangePasswordWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
 
         $user = new TestUser();
         $username = 'test_username';
@@ -282,13 +288,13 @@ class UserManipulatorTest extends TestCase
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue($user))
+            ->willReturn($user)
             ->with($this->equalTo($username));
 
         $userManagerMock->expects($this->once())
             ->method('updateUser')
-            ->will($this->returnValue($user))
-            ->with($this->isInstanceOf('FOS\UserBundle\Tests\TestUser'));
+            ->willReturn($user)
+            ->with($this->isInstanceOf(TestUser::class));
 
         $eventDispatcherMock = $this->getEventDispatcherMock(FOSUserEvents::USER_PASSWORD_CHANGED, true);
 
@@ -302,18 +308,18 @@ class UserManipulatorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      */
-    public function testChangePasswordWithInvalidUsername()
+    public function testChangePasswordWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
 
         $invalidusername = 'invalid_username';
         $password = 'test_password';
 
         $userManagerMock->expects($this->once())
             ->method('findUserByUsername')
-            ->will($this->returnValue(null))
+            ->willReturn(null)
             ->with($this->equalTo($invalidusername));
 
         $userManagerMock->expects($this->never())
@@ -327,19 +333,19 @@ class UserManipulatorTest extends TestCase
         $manipulator->changePassword($invalidusername, $password);
     }
 
-    public function testAddRole()
+    public function testAddRole(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $username = 'test_username';
         $userRole = 'test_role';
         $user = new TestUser();
 
         $userManagerMock->expects($this->exactly(2))
             ->method('findUserByUsername')
-            ->will($this->returnValue($user))
+            ->willReturn($user)
             ->with($this->equalTo($username));
 
-        $eventDispatcherMock = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $eventDispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
         $requestStackMock = $this->getRequestStackMock(false);
 
         $manipulator = new UserManipulator($userManagerMock, $eventDispatcherMock, $requestStackMock);
@@ -349,9 +355,9 @@ class UserManipulatorTest extends TestCase
         $this->assertTrue($user->hasRole($userRole));
     }
 
-    public function testRemoveRole()
+    public function testRemoveRole(): void
     {
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
         $username = 'test_username';
         $userRole = 'test_role';
         $user = new TestUser();
@@ -359,10 +365,10 @@ class UserManipulatorTest extends TestCase
 
         $userManagerMock->expects($this->exactly(2))
             ->method('findUserByUsername')
-            ->will($this->returnValue($user))
+            ->willReturn($user)
             ->with($this->equalTo($username));
 
-        $eventDispatcherMock = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $eventDispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
         $requestStackMock = $this->getRequestStackMock(false);
 
         $manipulator = new UserManipulator($userManagerMock, $eventDispatcherMock, $requestStackMock);
@@ -372,15 +378,9 @@ class UserManipulatorTest extends TestCase
         $this->assertFalse($manipulator->removeRole($username, $userRole));
     }
 
-    /**
-     * @param string $event
-     * @param bool   $once
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getEventDispatcherMock($event, $once = true)
+    protected function getEventDispatcherMock(string $event, bool $once = true): MockObject
     {
-        $eventDispatcherMock = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $eventDispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
 
         $eventDispatcherMock->expects($once ? $this->once() : $this->never())
             ->method('dispatch')
@@ -389,14 +389,9 @@ class UserManipulatorTest extends TestCase
         return $eventDispatcherMock;
     }
 
-    /**
-     * @param bool $once
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getRequestStackMock($once = true)
+    protected function getRequestStackMock(bool $once = true): MockObject
     {
-        $requestStackMock = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')->getMock();
+        $requestStackMock = $this->getMockBuilder(RequestStack::class)->getMock();
 
         $requestStackMock->expects($once ? $this->once() : $this->never())
             ->method('getCurrentRequest')

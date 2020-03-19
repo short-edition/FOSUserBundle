@@ -11,13 +11,18 @@
 
 namespace FOS\UserBundle\Tests\Security;
 
+use Exception;
 use FOS\UserBundle\Security\UserChecker;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Exception\AccountExpiredException;
+use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
+use Symfony\Component\Security\Core\Exception\DisabledException;
+use Symfony\Component\Security\Core\Exception\LockedException;
 
 class UserCheckerTest extends TestCase
 {
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\LockedException
+     * @expectedException LockedException
      * @expectedExceptionMessage User account is locked.
      */
     public function testCheckPreAuthFailsLockedOut()
@@ -28,7 +33,7 @@ class UserCheckerTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\DisabledException
+     * @expectedException DisabledException
      * @expectedExceptionMessage User account is disabled.
      */
     public function testCheckPreAuthFailsIsEnabled()
@@ -39,7 +44,7 @@ class UserCheckerTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccountExpiredException
+     * @expectedException AccountExpiredException
      * @expectedExceptionMessage User account has expired.
      */
     public function testCheckPreAuthFailsIsAccountNonExpired()
@@ -56,13 +61,13 @@ class UserCheckerTest extends TestCase
 
         try {
             $this->assertNull($checker->checkPreAuth($userMock));
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->fail();
         }
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\CredentialsExpiredException
+     * @expectedException CredentialsExpiredException
      * @expectedExceptionMessage User credentials have expired.
      */
     public function testCheckPostAuthFailsIsCredentialsNonExpired()
@@ -79,14 +84,14 @@ class UserCheckerTest extends TestCase
 
         try {
             $this->assertNull($checker->checkPostAuth($userMock));
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->fail();
         }
     }
 
     private function getUser($isAccountNonLocked, $isEnabled, $isAccountNonExpired, $isCredentialsNonExpired)
     {
-        $userMock = $this->getMockBuilder('FOS\UserBundle\Model\User')->getMock();
+        $userMock = $this->getMockBuilder(User::class)->getMock();
         $userMock
             ->method('isAccountNonLocked')
             ->willReturn($isAccountNonLocked);

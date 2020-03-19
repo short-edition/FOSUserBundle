@@ -24,7 +24,7 @@ class RoutingTest extends TestCase
      * @param string $routeName
      * @param string $path
      */
-    public function testLoadRouting($routeName, $path, array $methods)
+    public function testLoadRouting($routeName, $path, array $methods): void
     {
         $locator = new FileLocator();
         $loader = new XmlFileLoader($locator);
@@ -54,7 +54,7 @@ class RoutingTest extends TestCase
     /**
      * @return array
      */
-    public function loadRoutingProvider()
+    public function loadRoutingProvider(): array
     {
         return [
             ['fos_user_change_password', '/change-password', ['GET', 'POST']],

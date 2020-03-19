@@ -16,7 +16,7 @@ use FOS\UserBundle\Tests\TestUser;
 
 class RegistrationFormTypeTest extends ValidatorExtensionTypeTestCase
 {
-    public function testSubmit()
+    public function testSubmit(): void
     {
         $user = new TestUser();
 
@@ -38,13 +38,10 @@ class RegistrationFormTypeTest extends ValidatorExtensionTypeTestCase
         $this->assertSame('test', $user->getPlainPassword());
     }
 
-    /**
-     * @return array
-     */
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return array_merge(parent::getTypes(), [
-            new RegistrationFormType('FOS\UserBundle\Tests\TestUser'),
+            new RegistrationFormType(TestUser::class),
         ]);
     }
 }

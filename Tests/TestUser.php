@@ -18,7 +18,7 @@ class TestUser extends User
     /**
      * @param $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }

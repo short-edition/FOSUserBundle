@@ -15,11 +15,12 @@ use FOS\UserBundle\Command\ActivateUserCommand;
 use FOS\UserBundle\Util\UserManipulator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ActivateUserCommandTest extends TestCase
 {
-    public function testExecute()
+    public function testExecute(): void
     {
         $commandTester = $this->createCommandTester($this->getManipulator('user'));
         $exitCode = $commandTester->execute([
@@ -33,17 +34,17 @@ class ActivateUserCommandTest extends TestCase
         $this->assertRegExp('/User "user" has been activated/', $commandTester->getDisplay());
     }
 
-    public function testExecuteInteractiveWithQuestionHelper()
+    public function testExecuteInteractiveWithQuestionHelper(): void
     {
         $application = new Application();
 
-        $helper = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
+        $helper = $this->getMockBuilder(QuestionHelper::class)
             ->setMethods(['ask'])
             ->getMock();
 
         $helper->expects($this->at(0))
             ->method('ask')
-            ->will($this->returnValue('user'));
+            ->willReturn('user');
 
         $application->getHelperSet()->set($helper, 'question');
 
@@ -60,7 +61,7 @@ class ActivateUserCommandTest extends TestCase
     /**
      * @return CommandTester
      */
-    private function createCommandTester(UserManipulator $manipulator, Application $application = null)
+    private function createCommandTester(UserManipulator $manipulator, Application $application = null): CommandTester
     {
         if (null === $application) {
             $application = new Application();
@@ -82,7 +83,7 @@ class ActivateUserCommandTest extends TestCase
      */
     private function getManipulator($username)
     {
-        $manipulator = $this->getMockBuilder('FOS\UserBundle\Util\UserManipulator')
+        $manipulator = $this->getMockBuilder(UserManipulator::class)
             ->disableOriginalConstructor()
             ->getMock();
 

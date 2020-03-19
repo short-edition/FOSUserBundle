@@ -13,19 +13,20 @@ namespace FOS\UserBundle\Tests\Model;
 
 use FOS\UserBundle\Model\UserManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 
 class UserManagerTest extends TestCase
 {
-    /** @var UserManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UserManager|PHPUnit_Framework_MockObject_MockObject */
     private $manager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var PHPUnit_Framework_MockObject_MockObject */
     private $passwordUpdater;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var PHPUnit_Framework_MockObject_MockObject */
     private $fieldsUpdater;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->passwordUpdater = $this->getMockBuilder('FOS\UserBundle\Util\PasswordUpdaterInterface')->getMock();
         $this->fieldsUpdater = $this->getMockBuilder('FOS\UserBundle\Util\CanonicalFieldsUpdater')
@@ -172,7 +173,7 @@ class UserManagerTest extends TestCase
      */
     private function getUser()
     {
-        return $this->getMockBuilder('FOS\UserBundle\Model\User')
+        return $this->getMockBuilder(User::class)
             ->getMockForAbstractClass();
     }
 

@@ -11,12 +11,13 @@
 
 namespace FOS\UserBundle\Tests\Model;
 
+use DateTime;
 use FOS\UserBundle\Model\User;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function testUsername()
+    public function testUsername(): void
     {
         $user = $this->getUser();
         $this->assertNull($user->getUsername());
@@ -25,7 +26,7 @@ class UserTest extends TestCase
         $this->assertSame('tony', $user->getUsername());
     }
 
-    public function testEmail()
+    public function testEmail(): void
     {
         $user = $this->getUser();
         $this->assertNull($user->getEmail());
@@ -34,10 +35,10 @@ class UserTest extends TestCase
         $this->assertSame('tony@mail.org', $user->getEmail());
     }
 
-    public function testIsPasswordRequestNonExpired()
+    public function testIsPasswordRequestNonExpired(): void
     {
         $user = $this->getUser();
-        $passwordRequestedAt = new \DateTime('-10 seconds');
+        $passwordRequestedAt = new DateTime('-10 seconds');
 
         $user->setPasswordRequestedAt($passwordRequestedAt);
 
@@ -46,10 +47,10 @@ class UserTest extends TestCase
         $this->assertFalse($user->isPasswordRequestNonExpired(5));
     }
 
-    public function testIsPasswordRequestAtCleared()
+    public function testIsPasswordRequestAtCleared(): void
     {
         $user = $this->getUser();
-        $passwordRequestedAt = new \DateTime('-10 seconds');
+        $passwordRequestedAt = new DateTime('-10 seconds');
 
         $user->setPasswordRequestedAt($passwordRequestedAt);
         $user->setPasswordRequestedAt(null);
@@ -58,7 +59,7 @@ class UserTest extends TestCase
         $this->assertFalse($user->isPasswordRequestNonExpired(5));
     }
 
-    public function testTrueHasRole()
+    public function testTrueHasRole(): void
     {
         $user = $this->getUser();
         $defaultrole = User::ROLE_DEFAULT;
@@ -70,7 +71,7 @@ class UserTest extends TestCase
         $this->assertTrue($user->hasRole($newrole));
     }
 
-    public function testFalseHasRole()
+    public function testFalseHasRole(): void
     {
         $user = $this->getUser();
         $newrole = 'ROLE_X';
@@ -79,11 +80,11 @@ class UserTest extends TestCase
         $this->assertTrue($user->hasRole($newrole));
     }
 
-    public function testIsEqualTo()
+    public function testIsEqualTo(): void
     {
         $user = $this->getUser();
         $this->assertTrue($user->isEqualTo($user));
-        $this->assertFalse($user->isEqualTo($this->getMockBuilder('FOS\UserBundle\Model\UserInterface')->getMock()));
+        $this->assertFalse($user->isEqualTo($this->getMockBuilder(User::class)->getMock()));
 
         $user2 = $this->getUser();
         $user2->setPassword('secret');
@@ -98,11 +99,8 @@ class UserTest extends TestCase
         $this->assertFalse($user->isEqualTo($user4));
     }
 
-    /**
-     * @return User
-     */
-    protected function getUser()
+    protected function getUser(): User
     {
-        return $this->getMockForAbstractClass('FOS\UserBundle\Model\User');
+        return $this->getMockForAbstractClass(User::class);
     }
 }

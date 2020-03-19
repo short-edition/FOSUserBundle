@@ -13,7 +13,9 @@ namespace FOS\UserBundle\Tests\DependencyInjection;
 
 use FOS\UserBundle\DependencyInjection\FOSUserExtension;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Parser;
 
 class FOSUserExtensionTest extends TestCase
@@ -21,15 +23,15 @@ class FOSUserExtensionTest extends TestCase
     /** @var ContainerBuilder */
     protected $configuration;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->configuration = null;
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedException InvalidConfigurationException
      */
-    public function testUserLoadThrowsExceptionUnlessDatabaseDriverSet()
+    public function testUserLoadThrowsExceptionUnlessDatabaseDriverSet(): void
     {
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
@@ -38,9 +40,9 @@ class FOSUserExtensionTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedException InvalidConfigurationException
      */
-    public function testUserLoadThrowsExceptionUnlessDatabaseDriverIsValid()
+    public function testUserLoadThrowsExceptionUnlessDatabaseDriverIsValid(): void
     {
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
@@ -49,9 +51,9 @@ class FOSUserExtensionTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedException InvalidConfigurationException
      */
-    public function testUserLoadThrowsExceptionUnlessFirewallNameSet()
+    public function testUserLoadThrowsExceptionUnlessFirewallNameSet(): void
     {
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
@@ -60,9 +62,9 @@ class FOSUserExtensionTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedException InvalidConfigurationException
      */
-    public function testUserLoadThrowsExceptionUnlessGroupModelClassSet()
+    public function testUserLoadThrowsExceptionUnlessGroupModelClassSet(): void
     {
         $loader = new FOSUserExtension();
         $config = $this->getFullConfig();
@@ -71,9 +73,9 @@ class FOSUserExtensionTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedException InvalidConfigurationException
      */
-    public function testUserLoadThrowsExceptionUnlessUserModelClassSet()
+    public function testUserLoadThrowsExceptionUnlessUserModelClassSet(): void
     {
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
@@ -82,9 +84,9 @@ class FOSUserExtensionTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedException InvalidConfigurationException
      */
-    public function testCustomDriverWithoutManager()
+    public function testCustomDriverWithoutManager(): void
     {
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
@@ -92,7 +94,7 @@ class FOSUserExtensionTest extends TestCase
         $loader->load([$config], new ContainerBuilder());
     }
 
-    public function testCustomDriver()
+    public function testCustomDriver(): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
@@ -106,7 +108,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertParameter('custom', 'fos_user.storage');
     }
 
-    public function testDisableRegistration()
+    public function testDisableRegistration(): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
@@ -128,7 +130,7 @@ class FOSUserExtensionTest extends TestCase
         );
     }
 
-    public function testDisableResetting()
+    public function testDisableResetting(): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
@@ -150,7 +152,7 @@ class FOSUserExtensionTest extends TestCase
         );
     }
 
-    public function testDisableProfile()
+    public function testDisableProfile(): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
@@ -160,7 +162,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertNotHasDefinition('fos_user.profile.form.factory');
     }
 
-    public function testDisableChangePassword()
+    public function testDisableChangePassword(): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
@@ -173,7 +175,7 @@ class FOSUserExtensionTest extends TestCase
     /**
      * @dataProvider providerEmailsDisabledFeature
      */
-    public function testEmailsDisabledFeature($testConfig, $registration, $resetting)
+    public function testEmailsDisabledFeature($testConfig, $registration, $resetting): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
@@ -185,7 +187,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertParameter($resetting, 'fos_user.resetting.email.from_email');
     }
 
-    public function providerEmailsDisabledFeature()
+    public function providerEmailsDisabledFeature(): array
     {
         $configBothFeaturesDisabled = ['registration' => false, 'resetting' => false];
         $configResettingDisabled = ['resetting' => false];
@@ -217,21 +219,21 @@ class FOSUserExtensionTest extends TestCase
         ];
     }
 
-    public function testUserLoadModelClassWithDefaults()
+    public function testUserLoadModelClassWithDefaults(): void
     {
         $this->createEmptyConfiguration();
 
         $this->assertParameter('Acme\MyBundle\Document\User', 'fos_user.model.user.class');
     }
 
-    public function testUserLoadModelClass()
+    public function testUserLoadModelClass(): void
     {
         $this->createFullConfiguration();
 
         $this->assertParameter('Acme\MyBundle\Entity\User', 'fos_user.model.user.class');
     }
 
-    public function testUserLoadManagerClassWithDefaults()
+    public function testUserLoadManagerClassWithDefaults(): void
     {
         $this->createEmptyConfiguration();
 
@@ -241,7 +243,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertNotHasDefinition('fos_user.group_manager');
     }
 
-    public function testUserLoadManagerClass()
+    public function testUserLoadManagerClass(): void
     {
         $this->createFullConfiguration();
 
@@ -251,7 +253,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertAlias('fos_user.group_manager.default', 'fos_user.group_manager');
     }
 
-    public function testUserLoadFormClass()
+    public function testUserLoadFormClass(): void
     {
         $this->createFullConfiguration();
 
@@ -262,7 +264,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertParameter('acme_my_resetting', 'fos_user.resetting.form.type');
     }
 
-    public function testUserLoadFormNameWithDefaults()
+    public function testUserLoadFormNameWithDefaults(): void
     {
         $this->createEmptyConfiguration();
 
@@ -272,7 +274,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertParameter('fos_user_resetting_form', 'fos_user.resetting.form.name');
     }
 
-    public function testUserLoadFormName()
+    public function testUserLoadFormName(): void
     {
         $this->createFullConfiguration();
 
@@ -283,7 +285,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertParameter('acme_resetting_form', 'fos_user.resetting.form.name');
     }
 
-    public function testUserLoadFormServiceWithDefaults()
+    public function testUserLoadFormServiceWithDefaults(): void
     {
         $this->createEmptyConfiguration();
 
@@ -294,7 +296,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertHasDefinition('fos_user.resetting.form.factory');
     }
 
-    public function testUserLoadFormService()
+    public function testUserLoadFormService(): void
     {
         $this->createFullConfiguration();
 
@@ -305,7 +307,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertHasDefinition('fos_user.resetting.form.factory');
     }
 
-    public function testUserLoadConfirmationEmailWithDefaults()
+    public function testUserLoadConfirmationEmailWithDefaults(): void
     {
         $this->createEmptyConfiguration();
 
@@ -317,7 +319,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertParameter(86400, 'fos_user.resetting.token_ttl');
     }
 
-    public function testUserLoadConfirmationEmail()
+    public function testUserLoadConfirmationEmail(): void
     {
         $this->createFullConfiguration();
 
@@ -329,7 +331,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertParameter(7200, 'fos_user.resetting.retry_ttl');
     }
 
-    public function testUserLoadUtilServiceWithDefaults()
+    public function testUserLoadUtilServiceWithDefaults(): void
     {
         $this->createEmptyConfiguration();
 
@@ -338,7 +340,7 @@ class FOSUserExtensionTest extends TestCase
         $this->assertAlias('fos_user.util.canonicalizer.default', 'fos_user.util.username_canonicalizer');
     }
 
-    public function testUserLoadUtilService()
+    public function testUserLoadUtilService(): void
     {
         $this->createFullConfiguration();
 
@@ -347,14 +349,14 @@ class FOSUserExtensionTest extends TestCase
         $this->assertAlias('acme_my.username_canonicalizer', 'fos_user.util.username_canonicalizer');
     }
 
-    public function testUserLoadFlashesByDefault()
+    public function testUserLoadFlashesByDefault(): void
     {
         $this->createEmptyConfiguration();
 
         $this->assertHasDefinition('fos_user.listener.flash');
     }
 
-    public function testUserLoadFlashesCanBeDisabled()
+    public function testUserLoadFlashesCanBeDisabled(): void
     {
         $this->createFullConfiguration();
 
@@ -367,7 +369,7 @@ class FOSUserExtensionTest extends TestCase
      * @param $dbDriver
      * @param $doctrineService
      */
-    public function testUserManagerSetFactory($dbDriver, $doctrineService)
+    public function testUserManagerSetFactory($dbDriver, $doctrineService): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
@@ -382,7 +384,7 @@ class FOSUserExtensionTest extends TestCase
         if (method_exists($definition, 'getFactory')) {
             $factory = $definition->getFactory();
 
-            $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factory[0]);
+            $this->assertInstanceOf(Reference::class, $factory[0]);
             $this->assertSame('fos_user.doctrine_registry', (string) $factory[0]);
             $this->assertSame('getManager', $factory[1]);
         } else {
@@ -394,7 +396,7 @@ class FOSUserExtensionTest extends TestCase
     /**
      * @return array
      */
-    public function userManagerSetFactoryProvider()
+    public function userManagerSetFactoryProvider(): array
     {
         return [
             ['orm', 'doctrine'],
@@ -403,30 +405,28 @@ class FOSUserExtensionTest extends TestCase
         ];
     }
 
-    protected function createEmptyConfiguration()
+    protected function createEmptyConfiguration(): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
         $loader->load([$config], $this->configuration);
-        $this->assertTrue($this->configuration instanceof ContainerBuilder);
+        $this->assertInstanceOf(ContainerBuilder::class, $this->configuration);
     }
 
-    protected function createFullConfiguration()
+    protected function createFullConfiguration(): void
     {
         $this->configuration = new ContainerBuilder();
         $loader = new FOSUserExtension();
         $config = $this->getFullConfig();
         $loader->load([$config], $this->configuration);
-        $this->assertTrue($this->configuration instanceof ContainerBuilder);
+        $this->assertInstanceOf(ContainerBuilder::class, $this->configuration);
     }
 
     /**
      * getEmptyConfig.
-     *
-     * @return array
      */
-    protected function getEmptyConfig()
+    protected function getEmptyConfig(): array
     {
         $yaml = <<<EOF
 db_driver: mongodb
@@ -506,36 +506,25 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    private function assertAlias($value, $key)
+    private function assertAlias(string $value, string $key): void
     {
         $this->assertSame($value, (string) $this->configuration->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
     /**
-     * @param mixed  $value
-     * @param string $key
+     * @param mixed $value
      */
-    private function assertParameter($value, $key)
+    private function assertParameter($value, string $key): void
     {
         $this->assertSame($value, $this->configuration->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    /**
-     * @param string $id
-     */
-    private function assertHasDefinition($id)
+    private function assertHasDefinition(string $id): void
     {
         $this->assertTrue(($this->configuration->hasDefinition($id) ?: $this->configuration->hasAlias($id)));
     }
 
-    /**
-     * @param string $id
-     */
-    private function assertNotHasDefinition($id)
+    private function assertNotHasDefinition(string $id): void
     {
         $this->assertFalse(($this->configuration->hasDefinition($id) ?: $this->configuration->hasAlias($id)));
     }
