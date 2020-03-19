@@ -29,37 +29,37 @@ interface UserManagerInterface
     /**
      * Creates an empty user instance.
      */
-    public function createUser(): User;
+    public function createUser(): UserInterface;
 
     /**
      * Deletes a user.
      */
-    public function deleteUser(User $user): void;
+    public function deleteUser(UserInterface $user): void;
 
     /**
      * Finds one user by the given criteria.
      */
-    public function findUserBy(array $criteria): ?User;
+    public function findUserBy(array $criteria): ?UserInterface;
 
     /**
      * Find a user by its username.
      */
-    public function findUserByUsername(string $username): ?User;
+    public function findUserByUsername(string $username): ?UserInterface;
 
     /**
      * Finds a user by its email.
      */
-    public function findUserByEmail(string $email): ?User;
+    public function findUserByEmail(string $email): ?UserInterface;
 
     /**
      * Finds a user by its username or email.
      */
-    public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User;
+    public function findUserByUsernameOrEmail(string $usernameOrEmail): ?UserInterface;
 
     /**
      * Finds a user by its confirmationToken.
      */
-    public function findUserByConfirmationToken(int $token): ?User;
+    public function findUserByConfirmationToken(int $token): ?UserInterface;
 
     /**
      * Returns a collection with all user instances.
@@ -74,20 +74,20 @@ interface UserManagerInterface
     /**
      * Reloads a user.
      */
-    public function reloadUser(User $user): void;
+    public function reloadUser(UserInterface $user): void;
 
     /**
      * Updates a user.
      */
-    public function updateUser(User $user, bool $andFlush = true);
+    public function updateUser(UserInterface $user, bool $andFlush = true);
 
     /**
      * Updates the canonical username and email fields for a user.
      */
-    public function updateCanonicalFields(User $user): void;
+    public function updateCanonicalFields(UserInterface $user): void;
 
     /**
      * Updates a user password if a plain password is set.
      */
-    public function updatePassword(User $user): void;
+    public function updatePassword(UserInterface $user): void;
 }

@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Util;
 
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 
 /**
  * Class updating the canonical fields of the user.
@@ -29,7 +29,7 @@ class CanonicalFieldsUpdater
         $this->emailCanonicalizer = $emailCanonicalizer;
     }
 
-    public function updateCanonicalFields(User $user): void
+    public function updateCanonicalFields(UserInterface $user): void
     {
         $user->setUsernameCanonical($this->canonicalizeUsername($user->getUsername()));
         $user->setEmailCanonical($this->canonicalizeEmail($user->getEmail()));

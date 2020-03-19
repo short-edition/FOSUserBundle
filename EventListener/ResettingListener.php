@@ -14,7 +14,7 @@ namespace FOS\UserBundle\EventListener;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -63,7 +63,7 @@ class ResettingListener implements EventSubscriberInterface
 
     public function onResettingResetSuccess(FormEvent $event): void
     {
-        /** @var $user User */
+        /** @var $user UserInterface */
         $user = $event->getForm()->getData();
 
         $user->setConfirmationToken(null);

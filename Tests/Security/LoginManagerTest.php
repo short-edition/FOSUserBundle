@@ -11,7 +11,6 @@
 
 namespace FOS\UserBundle\Tests\Security;
 
-use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Security\LoginManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;

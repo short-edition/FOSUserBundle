@@ -13,7 +13,7 @@ namespace FOS\UserBundle\Util;
 
 use FOS\UserBundle\Event\UserEvent;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +66,7 @@ class UserManipulator
      *
      * @return User
      */
-    public function create($username, $password, $email, $active, $superadmin): User
+    public function create($username, $password, $email, $active, $superadmin): UserInterface
     {
         $user = $this->userManager->createUser();
         $user->setUsername($username);
@@ -182,11 +182,11 @@ class UserManipulator
      *
      * @param string $username
      *
-     * @return User
+     * @return UserInterface
      * @throws InvalidArgumentException When user does not exist
      *
      */
-    private function findUserByUsernameOrThrowException($username): User
+    private function findUserByUsernameOrThrowException($username): UserInterface
     {
         $user = $this->userManager->findUserByUsername($username);
 

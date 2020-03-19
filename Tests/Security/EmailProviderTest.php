@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Tests\Security;
 
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Security\EmailProvider;
 use FOS\UserBundle\Tests\TestUser;
@@ -19,7 +19,6 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class EmailProviderTest extends TestCase
 {

@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Event;
 
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,7 +22,7 @@ class FilterUserResponseEvent extends UserEvent
     /**
      * FilterUserResponseEvent constructor.
      */
-    public function __construct(User $user, Request $request, Response $response)
+    public function __construct(UserInterface $user, Request $request, Response $response)
     {
         parent::__construct($user, $request);
         $this->response = $response;

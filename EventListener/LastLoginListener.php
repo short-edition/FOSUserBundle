@@ -14,7 +14,7 @@ namespace FOS\UserBundle\EventListener;
 use DateTime;
 use FOS\UserBundle\Event\UserEvent;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -55,7 +55,7 @@ class LastLoginListener implements EventSubscriberInterface
     {
         $user = $event->getAuthenticationToken()->getUser();
 
-        if ($user instanceof User) {
+        if ($user instanceof UserInterface) {
             $user->setLastLogin(new DateTime());
             $this->userManager->updateUser($user);
         }

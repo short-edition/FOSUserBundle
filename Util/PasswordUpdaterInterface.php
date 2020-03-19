@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Util;
 
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 
 /**
  * @author Christophe Coevoet <stof@notk.org>
@@ -24,5 +24,5 @@ interface PasswordUpdaterInterface
      * The implement should be a no-op in case there is no new password (it should not erase the
      * existing hash with a wrong one).
      */
-    public function hashPassword(User $user): void;
+    public function hashPassword(UserInterface $user): void;
 }

@@ -12,7 +12,6 @@
 namespace FOS\UserBundle\Tests\Model;
 
 use DateTime;
-use FOS\UserBundle\Model\User;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase

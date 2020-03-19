@@ -13,7 +13,6 @@ namespace FOS\UserBundle\Model;
 
 use DateTime;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 
 /**
  * Storage agnostic user object.
@@ -21,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-abstract class User implements BaseUserInterface, GroupableInterface
+abstract class User implements UserInterface, GroupableInterface
 {
     public const ROLE_DEFAULT = 'ROLE_USER';
 
@@ -452,7 +451,7 @@ abstract class User implements BaseUserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setConfirmationToken(string $confirmationToken)
+    public function setConfirmationToken(?string $confirmationToken)
     {
         $this->confirmationToken = $confirmationToken;
 

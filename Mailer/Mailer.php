@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Mailer;
 
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -56,7 +56,7 @@ class Mailer implements MailerInterface
     /**
      * {@inheritdoc}
      */
-    public function sendConfirmationEmailMessage(User $user): void
+    public function sendConfirmationEmailMessage(UserInterface $user): void
     {
         $template = $this->parameters['confirmation.template'];
         $url = $this->router->generate('fos_user_registration_confirm', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -70,7 +70,7 @@ class Mailer implements MailerInterface
     /**
      * {@inheritdoc}
      */
-    public function sendResettingEmailMessage(User $user): void
+    public function sendResettingEmailMessage(UserInterface $user): void
     {
         $template = $this->parameters['resetting.template'];
         $url = $this->router->generate('fos_user_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);

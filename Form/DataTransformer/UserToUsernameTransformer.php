@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Form\DataTransformer;
 
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -51,8 +51,8 @@ class UserToUsernameTransformer implements DataTransformerInterface
             return null;
         }
 
-        if (!$value instanceof User) {
-            throw new UnexpectedTypeException($value, 'FOS\UserBundle\Model\User');
+        if (!$value instanceof UserInterface) {
+            throw new UnexpectedTypeException($value, UserInterface::class);
         }
 
         return $value->getUsername();
@@ -63,7 +63,7 @@ class UserToUsernameTransformer implements DataTransformerInterface
      *
      * @param string $value Username
      *
-     * @return User the corresponding User instance
+     * @return UserInterface the corresponding User instance
      *
      * @throws UnexpectedTypeException if the given value is not a string
      */

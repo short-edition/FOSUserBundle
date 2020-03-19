@@ -14,7 +14,7 @@ namespace FOS\UserBundle\Doctrine\CouchDB;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ODM\CouchDB\Event;
 use Doctrine\ODM\CouchDB\Event\LifecycleEventArgs;
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Util\CanonicalFieldsUpdater;
 use FOS\UserBundle\Util\PasswordUpdaterInterface;
 
@@ -43,7 +43,7 @@ class UserListener implements EventSubscriber
     public function prePersist(LifecycleEventArgs $args): void
     {
         $object = $args->getDocument();
-        if ($object instanceof User) {
+        if ($object instanceof UserInterface) {
             $this->updateUserFields($object);
         }
     }
@@ -51,7 +51,7 @@ class UserListener implements EventSubscriber
     public function preUpdate(LifecycleEventArgs $args): void
     {
         $object = $args->getDocument();
-        if ($object instanceof User) {
+        if ($object instanceof UserInterface) {
             $this->updateUserFields($object);
         }
     }
@@ -59,7 +59,7 @@ class UserListener implements EventSubscriber
     /**
      * Updates the user properties.
      */
-    private function updateUserFields(User $user): void
+    private function updateUserFields(UserInterface $user): void
     {
         $this->canonicalFieldsUpdater->updateCanonicalFields($user);
         $this->passwordUpdater->hashPassword($user);

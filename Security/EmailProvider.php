@@ -11,8 +11,6 @@
 
 namespace FOS\UserBundle\Security;
 
-use FOS\UserBundle\Model\User;
-
 class EmailProvider extends UserProvider
 {
     /**

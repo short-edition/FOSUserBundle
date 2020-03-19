@@ -13,7 +13,7 @@ namespace FOS\UserBundle\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManager as BaseUserManager;
 use FOS\UserBundle\Util\CanonicalFieldsUpdater;
 use FOS\UserBundle\Util\PasswordUpdaterInterface;
@@ -46,7 +46,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function deleteUser(User $user): void
+    public function deleteUser(UserInterface $user): void
     {
         $this->objectManager->remove($user);
         $this->objectManager->flush();
@@ -84,7 +84,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function reloadUser(User $user): void
+    public function reloadUser(UserInterface $user): void
     {
         $this->objectManager->refresh($user);
     }

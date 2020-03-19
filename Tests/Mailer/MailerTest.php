@@ -12,7 +12,6 @@
 namespace FOS\UserBundle\Tests\Mailer;
 
 use FOS\UserBundle\Mailer\Mailer;
-use FOS\UserBundle\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swift_Events_EventDispatcher;

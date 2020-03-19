@@ -14,7 +14,6 @@ namespace FOS\UserBundle\Tests\EventListener;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\EventListener\AuthenticationListener;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Security\LoginManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;

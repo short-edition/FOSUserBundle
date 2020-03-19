@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Mailer;
 
-use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 
 /**
  * This mailer does nothing.
@@ -22,12 +22,12 @@ use FOS\UserBundle\Model\User;
  */
 class NoopMailer implements MailerInterface
 {
-    public function sendConfirmationEmailMessage(User $user): void
+    public function sendConfirmationEmailMessage(UserInterface $user): void
     {
         // nothing happens.
     }
 
-    public function sendResettingEmailMessage(User $user): void
+    public function sendResettingEmailMessage(UserInterface $user): void
     {
         // nothing happens.
     }

@@ -11,7 +11,6 @@
 
 namespace FOS\UserBundle\Security;
 
-use FOS\UserBundle\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 
 interface LoginManagerInterface

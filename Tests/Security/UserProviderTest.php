@@ -11,7 +11,6 @@
 
 namespace FOS\UserBundle\Tests\Security;
 
-use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Security\UserProvider;
 use FOS\UserBundle\Tests\TestUser;
