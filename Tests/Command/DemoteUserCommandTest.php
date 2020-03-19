@@ -65,7 +65,7 @@ class DemoteUserCommandTest extends TestCase
     /**
      * @return CommandTester
      */
-    private function createCommandTester(UserManipulator $manipulator, Application $application = null): void
+    private function createCommandTester(UserManipulator $manipulator, Application $application = null): CommandTester
     {
         if (null === $application) {
             $application = new Application();
@@ -98,14 +98,14 @@ class DemoteUserCommandTest extends TestCase
                 ->expects($this->once())
                 ->method('demote')
                 ->with($username)
-                ->will($this->returnValue(true))
+                ->willReturn(true)
             ;
         } else {
             $manipulator
                 ->expects($this->once())
                 ->method('removeRole')
                 ->with($username, $role)
-                ->will($this->returnValue(true))
+                ->willReturn(true)
             ;
         }
 

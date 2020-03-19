@@ -11,7 +11,10 @@
 
 namespace FOS\UserBundle\Tests\Model;
 
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManager;
+use FOS\UserBundle\Util\CanonicalFieldsUpdater;
+use FOS\UserBundle\Util\PasswordUpdaterInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -28,8 +31,8 @@ class UserManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->passwordUpdater = $this->getMockBuilder('FOS\UserBundle\Util\PasswordUpdaterInterface')->getMock();
-        $this->fieldsUpdater = $this->getMockBuilder('FOS\UserBundle\Util\CanonicalFieldsUpdater')
+        $this->passwordUpdater = $this->getMockBuilder(PasswordUpdaterInterface::class)->getMock();
+        $this->fieldsUpdater = $this->getMockBuilder(CanonicalFieldsUpdater::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -39,7 +42,7 @@ class UserManagerTest extends TestCase
         ]);
     }
 
-    public function testUpdateCanonicalFields()
+    public function testUpdateCanonicalFields(): void
     {
         $user = $this->getUser();
 
@@ -50,7 +53,7 @@ class UserManagerTest extends TestCase
         $this->manager->updateCanonicalFields($user);
     }
 
-    public function testUpdatePassword()
+    public function testUpdatePassword(): void
     {
         $user = $this->getUser();
 
@@ -61,7 +64,7 @@ class UserManagerTest extends TestCase
         $this->manager->updatePassword($user);
     }
 
-    public function testFindUserByUsername()
+    public function testFindUserByUsername(): void
     {
         $this->manager->expects($this->once())
             ->method('findUserBy')
@@ -69,12 +72,12 @@ class UserManagerTest extends TestCase
         $this->fieldsUpdater->expects($this->once())
             ->method('canonicalizeUsername')
             ->with('jack')
-            ->will($this->returnValue('jack'));
+            ->willReturn('jack');
 
         $this->manager->findUserByUsername('jack');
     }
 
-    public function testFindUserByUsernameLowercasesTheUsername()
+    public function testFindUserByUsernameLowercasesTheUsername(): void
     {
         $this->manager->expects($this->once())
             ->method('findUserBy')
@@ -82,12 +85,12 @@ class UserManagerTest extends TestCase
         $this->fieldsUpdater->expects($this->once())
             ->method('canonicalizeUsername')
             ->with('JaCk')
-            ->will($this->returnValue('jack'));
+            ->willReturn('jack');
 
         $this->manager->findUserByUsername('JaCk');
     }
 
-    public function testFindUserByEmail()
+    public function testFindUserByEmail(): void
     {
         $this->manager->expects($this->once())
             ->method('findUserBy')
@@ -95,12 +98,12 @@ class UserManagerTest extends TestCase
         $this->fieldsUpdater->expects($this->once())
             ->method('canonicalizeEmail')
             ->with('jack@email.org')
-            ->will($this->returnValue('jack@email.org'));
+            ->willReturn('jack@email.org');
 
         $this->manager->findUserByEmail('jack@email.org');
     }
 
-    public function testFindUserByEmailLowercasesTheEmail()
+    public function testFindUserByEmailLowercasesTheEmail(): void
     {
         $this->manager->expects($this->once())
             ->method('findUserBy')
@@ -108,12 +111,12 @@ class UserManagerTest extends TestCase
         $this->fieldsUpdater->expects($this->once())
             ->method('canonicalizeEmail')
             ->with('JaCk@EmAiL.oRg')
-            ->will($this->returnValue('jack@email.org'));
+            ->willReturn('jack@email.org');
 
         $this->manager->findUserByEmail('JaCk@EmAiL.oRg');
     }
 
-    public function testFindUserByUsernameOrEmailWithUsername()
+    public function testFindUserByUsernameOrEmailWithUsername(): void
     {
         $this->manager->expects($this->once())
             ->method('findUserBy')
@@ -121,12 +124,12 @@ class UserManagerTest extends TestCase
         $this->fieldsUpdater->expects($this->once())
             ->method('canonicalizeUsername')
             ->with('JaCk')
-            ->will($this->returnValue('jack'));
+            ->willReturn('jack');
 
         $this->manager->findUserByUsernameOrEmail('JaCk');
     }
 
-    public function testFindUserByUsernameOrEmailWithEmail()
+    public function testFindUserByUsernameOrEmailWithEmail(): void
     {
         $this->manager->expects($this->once())
             ->method('findUserBy')
@@ -135,12 +138,12 @@ class UserManagerTest extends TestCase
         $this->fieldsUpdater->expects($this->once())
             ->method('canonicalizeEmail')
             ->with('JaCk@EmAiL.oRg')
-            ->will($this->returnValue('jack@email.org'));
+            ->willReturn('jack@email.org');
 
         $this->manager->findUserByUsernameOrEmail('JaCk@EmAiL.oRg');
     }
 
-    public function testFindUserByUsernameOrEmailWithUsernameThatLooksLikeEmail()
+    public function testFindUserByUsernameOrEmailWithUsernameThatLooksLikeEmail(): void
     {
         $usernameThatLooksLikeEmail = 'bob@example.com';
         $user = $this->getUser();
@@ -148,7 +151,7 @@ class UserManagerTest extends TestCase
         $this->manager->expects($this->at(0))
             ->method('findUserBy')
             ->with($this->equalTo(['emailCanonical' => $usernameThatLooksLikeEmail]))
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->fieldsUpdater->expects($this->once())
             ->method('canonicalizeEmail')
             ->with($usernameThatLooksLikeEmail)
@@ -157,7 +160,7 @@ class UserManagerTest extends TestCase
         $this->manager->expects($this->at(1))
             ->method('findUserBy')
             ->with($this->equalTo(['usernameCanonical' => $usernameThatLooksLikeEmail]))
-            ->will($this->returnValue($user));
+            ->willReturn($user);
         $this->fieldsUpdater->expects($this->once())
             ->method('canonicalizeUsername')
             ->with($usernameThatLooksLikeEmail)
@@ -182,7 +185,7 @@ class UserManagerTest extends TestCase
      */
     private function getUserManager(array $args)
     {
-        return $this->getMockBuilder('FOS\UserBundle\Model\UserManager')
+        return $this->getMockBuilder(UserManager::class)
             ->setConstructorArgs($args)
             ->getMockForAbstractClass();
     }

@@ -28,66 +28,55 @@ class FOSUserExtensionTest extends TestCase
         $this->configuration = null;
     }
 
-    /**
-     * @expectedException InvalidConfigurationException
-     */
     public function testUserLoadThrowsExceptionUnlessDatabaseDriverSet(): void
     {
+        $this->expectException(InvalidConfigurationException::class);
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
         unset($config['db_driver']);
         $loader->load([$config], new ContainerBuilder());
     }
 
-    /**
-     * @expectedException InvalidConfigurationException
-     */
     public function testUserLoadThrowsExceptionUnlessDatabaseDriverIsValid(): void
     {
+        $this->expectException(InvalidConfigurationException::class);
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
         $config['db_driver'] = 'foo';
         $loader->load([$config], new ContainerBuilder());
     }
 
-    /**
-     * @expectedException InvalidConfigurationException
-     */
     public function testUserLoadThrowsExceptionUnlessFirewallNameSet(): void
     {
+        $this->expectException(InvalidConfigurationException::class);
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
         unset($config['firewall_name']);
         $loader->load([$config], new ContainerBuilder());
     }
 
-    /**
-     * @expectedException InvalidConfigurationException
-     */
     public function testUserLoadThrowsExceptionUnlessGroupModelClassSet(): void
     {
+        $this->expectException(InvalidConfigurationException::class);
         $loader = new FOSUserExtension();
         $config = $this->getFullConfig();
         unset($config['group']['group_class']);
         $loader->load([$config], new ContainerBuilder());
     }
 
-    /**
-     * @expectedException InvalidConfigurationException
-     */
+
     public function testUserLoadThrowsExceptionUnlessUserModelClassSet(): void
     {
+        $this->expectException(InvalidConfigurationException::class);
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
         unset($config['user_class']);
         $loader->load([$config], new ContainerBuilder());
     }
 
-    /**
-     * @expectedException InvalidConfigurationException
-     */
     public function testCustomDriverWithoutManager(): void
     {
+        $this->expectException(InvalidConfigurationException::class);
         $loader = new FOSUserExtension();
         $config = $this->getEmptyConfig();
         $config['db_driver'] = 'custom';

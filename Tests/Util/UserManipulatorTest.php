@@ -16,7 +16,6 @@ use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Tests\TestUser;
 use FOS\UserBundle\Util\UserManipulator;
 use InvalidArgumentException;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,7 +25,7 @@ class UserManipulatorTest extends TestCase
 {
     public function testCreate(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $user = new TestUser();
 
         $username = 'test_username';
@@ -49,6 +48,7 @@ class UserManipulatorTest extends TestCase
         $requestStackMock = $this->getRequestStackMock(true);
 
         $manipulator = new UserManipulator($userManagerMock, $eventDispatcherMock, $requestStackMock);
+
         $manipulator->create($username, $password, $email, $active, $superadmin);
 
         $this->assertSame($username, $user->getUsername());
@@ -60,7 +60,7 @@ class UserManipulatorTest extends TestCase
 
     public function testActivateWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $username = 'test_username';
 
         $user = new TestUser();
@@ -88,12 +88,11 @@ class UserManipulatorTest extends TestCase
         $this->assertTrue($user->isEnabled());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testActivateWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $this->expectException(InvalidArgumentException::class);
+
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $invalidusername = 'invalid_username';
 
         $userManagerMock->expects($this->once())
@@ -114,7 +113,7 @@ class UserManipulatorTest extends TestCase
 
     public function testDeactivateWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $username = 'test_username';
 
         $user = new TestUser();
@@ -142,12 +141,11 @@ class UserManipulatorTest extends TestCase
         $this->assertFalse($user->isEnabled());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testDeactivateWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $this->expectException(InvalidArgumentException::class);
+
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $invalidusername = 'invalid_username';
 
         $userManagerMock->expects($this->once())
@@ -168,7 +166,7 @@ class UserManipulatorTest extends TestCase
 
     public function testPromoteWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $username = 'test_username';
 
         $user = new TestUser();
@@ -196,12 +194,11 @@ class UserManipulatorTest extends TestCase
         $this->assertTrue($user->isSuperAdmin());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testPromoteWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $this->expectException(InvalidArgumentException::class);
+
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $invalidusername = 'invalid_username';
 
         $userManagerMock->expects($this->once())
@@ -222,7 +219,7 @@ class UserManipulatorTest extends TestCase
 
     public function testDemoteWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $username = 'test_username';
 
         $user = new TestUser();
@@ -250,12 +247,11 @@ class UserManipulatorTest extends TestCase
         $this->assertFalse($user->isSuperAdmin());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testDemoteWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $this->expectException(InvalidArgumentException::class);
+
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $invalidusername = 'invalid_username';
 
         $userManagerMock->expects($this->once())
@@ -276,7 +272,7 @@ class UserManipulatorTest extends TestCase
 
     public function testChangePasswordWithValidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $userManagerMock = $this->getUserManagerInterfaceMock();
 
         $user = new TestUser();
         $username = 'test_username';
@@ -307,12 +303,11 @@ class UserManipulatorTest extends TestCase
         $this->assertSame($password, $user->getPlainPassword());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testChangePasswordWithInvalidUsername(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $this->expectException(InvalidArgumentException::class);
+
+        $userManagerMock = $this->getUserManagerInterfaceMock();
 
         $invalidusername = 'invalid_username';
         $password = 'test_password';
@@ -335,7 +330,7 @@ class UserManipulatorTest extends TestCase
 
     public function testAddRole(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $username = 'test_username';
         $userRole = 'test_role';
         $user = new TestUser();
@@ -357,7 +352,7 @@ class UserManipulatorTest extends TestCase
 
     public function testRemoveRole(): void
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)->getMock();
+        $userManagerMock = $this->getUserManagerInterfaceMock();
         $username = 'test_username';
         $userRole = 'test_role';
         $user = new TestUser();
@@ -378,18 +373,18 @@ class UserManipulatorTest extends TestCase
         $this->assertFalse($manipulator->removeRole($username, $userRole));
     }
 
-    protected function getEventDispatcherMock(string $event, bool $once = true): MockObject
+    protected function getEventDispatcherMock($event, bool $once = true): EventDispatcherInterface
     {
         $eventDispatcherMock = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
 
         $eventDispatcherMock->expects($once ? $this->once() : $this->never())
             ->method('dispatch')
-            ->with($event);
+            ->withAnyParameters();
 
         return $eventDispatcherMock;
     }
 
-    protected function getRequestStackMock(bool $once = true): MockObject
+    protected function getRequestStackMock(bool $once = true): RequestStack
     {
         $requestStackMock = $this->getMockBuilder(RequestStack::class)->getMock();
 
@@ -398,5 +393,10 @@ class UserManipulatorTest extends TestCase
             ->willReturn(null);
 
         return $requestStackMock;
+    }
+
+    protected function getUserManagerInterfaceMock(): UserManagerInterface
+    {
+        return $this->getMockBuilder(UserManagerInterface::class)->getMock();
     }
 }

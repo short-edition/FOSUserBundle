@@ -12,6 +12,7 @@
 namespace FOS\UserBundle\Tests\Mailer;
 
 use FOS\UserBundle\Mailer\TwigSwiftMailer;
+use FOS\UserBundle\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swift_Events_EventDispatcher;
@@ -37,10 +38,10 @@ class TwigSwiftMailerTest extends TestCase
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException Swift_RfcComplianceException
      */
     public function testSendConfirmationEmailMessageWithBadEmails($emailAddress): void
     {
+        $this->expectException(Swift_RfcComplianceException::class);
         $mailer = $this->getTwigSwiftMailer();
         $mailer->sendConfirmationEmailMessage($this->getUser($emailAddress));
     }
@@ -58,10 +59,10 @@ class TwigSwiftMailerTest extends TestCase
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException Swift_RfcComplianceException
      */
     public function testSendResettingEmailMessageWithBadEmails($emailAddress): void
     {
+        $this->expectException(Swift_RfcComplianceException::class);
         $mailer = $this->getTwigSwiftMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
     }
@@ -118,7 +119,7 @@ TWIG
         ]));
     }
 
-    private function getUser($emailAddress): MockObject
+    private function getUser(string $emailAddress): MockObject
     {
         $user = $this->getMockBuilder(User::class)->getMock();
         $user->method('getEmail')
@@ -127,7 +128,7 @@ TWIG
         return $user;
     }
 
-    private function getEmailAddressValueObject($emailAddressAsString): MockObject
+    private function getEmailAddressValueObject(string $emailAddressAsString): MockObject
     {
         $emailAddress = $this->getMockBuilder('EmailAddress')
             ->setMethods(['__toString'])

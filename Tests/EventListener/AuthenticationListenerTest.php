@@ -18,13 +18,13 @@ use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Security\LoginManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AuthenticationListenerTest extends TestCase
 {
-    const FIREWALL_NAME = 'foo';
+    public const FIREWALL_NAME = 'foo';
 
     /** @var EventDispatcherInterface */
     private $eventDispatcher;

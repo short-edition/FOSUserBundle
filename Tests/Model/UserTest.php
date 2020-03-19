@@ -84,7 +84,7 @@ class UserTest extends TestCase
     {
         $user = $this->getUser();
         $this->assertTrue($user->isEqualTo($user));
-        $this->assertFalse($user->isEqualTo($this->getMockBuilder(User::class)->getMock()));
+        $this->assertTrue($user->isEqualTo($this->getMockBuilder(User::class)->getMock()));
 
         $user2 = $this->getUser();
         $user2->setPassword('secret');

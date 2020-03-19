@@ -12,6 +12,7 @@
 namespace FOS\UserBundle\Tests\Mailer;
 
 use FOS\UserBundle\Mailer\Mailer;
+use FOS\UserBundle\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swift_Events_EventDispatcher;
@@ -19,6 +20,7 @@ use Swift_Mailer;
 use Swift_RfcComplianceException;
 use Swift_Transport_NullTransport;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 class MailerTest extends TestCase
 {
@@ -39,6 +41,7 @@ class MailerTest extends TestCase
      */
     public function testSendConfirmationEmailMessageWithBadEmails($emailAddress): void
     {
+        $this->expectException(Swift_RfcComplianceException::class);
         $mailer = $this->getMailer();
         $mailer->sendConfirmationEmailMessage($this->getUser($emailAddress));
     }
@@ -60,6 +63,7 @@ class MailerTest extends TestCase
      */
     public function testSendResettingEmailMessageWithBadEmails($emailAddress): void
     {
+        $this->expectException(Swift_RfcComplianceException::class);
         $mailer = $this->getMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
     }
@@ -110,7 +114,7 @@ class MailerTest extends TestCase
             ->getMock();
     }
 
-    private function getUser($emailAddress): MockObject
+    private function getUser(string $emailAddress): MockObject
     {
         $user = $this->getMockBuilder(User::class)->getMock();
         $user->method('getEmail')

@@ -65,7 +65,7 @@ class PromoteUserCommandTest extends TestCase
     /**
      * @return CommandTester
      */
-    private function createCommandTester(UserManipulator $manipulator, Application $application = null): void
+    private function createCommandTester(UserManipulator $manipulator, Application $application = null): CommandTester
     {
         if (null === $application) {
             $application = new Application();

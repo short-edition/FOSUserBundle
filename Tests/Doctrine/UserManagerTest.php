@@ -78,7 +78,7 @@ class UserManagerTest extends TestCase
     public function testFindUserBy(): void
     {
         $crit = ['foo' => 'bar'];
-        $this->repository->expects($this->once())->method('findOneBy')->with($this->equalTo($crit))->willReturn([]);
+        $this->repository->expects($this->once())->method('findOneBy')->with($this->equalTo($crit))->willReturn(null);
 
         $this->userManager->findUserBy($crit);
     }
