@@ -17,7 +17,7 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
- * Transforms between a User instance and a username string.
+ * Transforms between a UserInterface instance and a username string.
  *
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  */
@@ -37,13 +37,13 @@ class UserToUsernameTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms a User instance into a username string.
+     * Transforms a UserInterface instance into a username string.
      *
-     * @param User|null $value User instance
+     * @param UserInterface|null $value UserInterface instance
      *
      * @return string|null Username
      *
-     * @throws UnexpectedTypeException if the given value is not a User instance
+     * @throws UnexpectedTypeException if the given value is not a UserInterface instance
      */
     public function transform($value): ?string
     {
@@ -59,15 +59,15 @@ class UserToUsernameTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms a username string into a User instance.
+     * Transforms a username string into a UserInterface instance.
      *
      * @param string $value Username
      *
-     * @return UserInterface the corresponding User instance
+     * @return UserInterface the corresponding UserInterface instance
      *
      * @throws UnexpectedTypeException if the given value is not a string
      */
-    public function reverseTransform($value): ?User
+    public function reverseTransform($value): ?UserInterface
     {
         if (null === $value || '' === $value) {
             return null;

@@ -68,7 +68,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function findUserBy(array $criteria): ?User
+    public function findUserBy(array $criteria): ?UserInterface
     {
         return $this->getRepository()->findOneBy($criteria);
     }
@@ -92,7 +92,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function updateUser(User $user, $andFlush = true)
+    public function updateUser(UserInterface $user, $andFlush = true): void
     {
         $this->updateCanonicalFields($user);
         $this->updatePassword($user);

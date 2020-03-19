@@ -84,9 +84,9 @@ class UserProvider implements UserProviderInterface
      *
      * @param string $username
      *
-     * @return User|null
+     * @return UserInterface|null
      */
-    protected function findUser($username)
+    protected function findUser($username): ?UserInterface
     {
         return $this->userManager->findUserByUsername($username);
     }

@@ -193,14 +193,14 @@ which is listed below.
         /**
          * Send an email to a user to confirm the account creation
          *
-         * @param User $user
+         * @param UserInterface $user
          */
         function sendConfirmationEmailMessage(UserInterface $user);
 
         /**
          * Send an email to a user to confirm the password reset
          *
-         * @param User $user
+         * @param UserInterface $user
          */
         function sendResettingEmailMessage(UserInterface $user);
     }
