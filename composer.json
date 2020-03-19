@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": "^7.3",
-        "paragonie/random_compat": "^9",
+        "paragonie/random_compat": "^2 || ^9",
         "symfony/flex": "1.6",
         "symfony/form": "^4.4 || ^5.0",
         "symfony/framework-bundle": "^4.4 || ^5.0",
