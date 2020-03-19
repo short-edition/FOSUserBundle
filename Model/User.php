@@ -13,6 +13,7 @@ namespace FOS\UserBundle\Model;
 
 use DateTime;
 use Doctrine\Common\Collections\Collection;
+use Traversable;
 
 /**
  * Storage agnostic user object.
@@ -498,7 +499,7 @@ abstract class User implements UserInterface, GroupableInterface
     /**
      * @return GroupInterface[] return array of GroupInterface
      */
-    public function getGroups(): array
+    public function getGroups(): Traversable
     {
         return $this->groups ?: $this->groups = [];
     }
