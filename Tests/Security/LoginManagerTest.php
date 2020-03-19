@@ -11,6 +11,7 @@
 
 namespace FOS\UserBundle\Tests\Security;
 
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Security\LoginManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +52,7 @@ class LoginManagerTest extends TestCase
         $userChecker
             ->expects($this->once())
             ->method('checkPreAuth')
-            ->with($this->isInstanceOf(User::class));
+            ->with($this->isInstanceOf(UserInterface::class));
 
         $request = $this->getMockBuilder(Request::class)->getMock();
 
@@ -84,7 +85,7 @@ class LoginManagerTest extends TestCase
      */
     private function mockUser()
     {
-        $user = $this->getMockBuilder(User::class)->getMock();
+        $user = $this->getMockBuilder(UserInterface::class)->getMock();
         $user
             ->expects($this->once())
             ->method('getRoles')

@@ -11,6 +11,7 @@
 
 namespace FOS\UserBundle\Tests\Security;
 
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Security\EmailProvider;
@@ -40,7 +41,7 @@ class EmailProviderTest extends TestCase
 
     public function testLoadUserByUsername(): void
     {
-        $user = $this->getMockBuilder(User::class)->getMock();
+        $user = $this->getMockBuilder(UserInterface::class)->getMock();
         $this->userManager->expects($this->once())
             ->method('findUserByEmail')
             ->with('foobar')
@@ -71,7 +72,7 @@ class EmailProviderTest extends TestCase
             ->method('getId')
             ->willReturn('123');
 
-        $refreshedUser = $this->getMockBuilder(User::class)->getMock();
+        $refreshedUser = $this->getMockBuilder(UserInterface::class)->getMock();
         $this->userManager->expects($this->once())
             ->method('findUserBy')
             ->with(['id' => '123'])
@@ -128,9 +129,9 @@ class EmailProviderTest extends TestCase
         return $this->getMockBuilder(UserManagerInterface::class)->getMock();
     }
 
-    private function getUserInterface(): UserInterface
+    private function getUserInterface(): \Symfony\Component\Security\Core\User\UserInterface
     {
-        return $this->getMockBuilder(UserInterface::class)->getMock();
+        return $this->getMockBuilder(\Symfony\Component\Security\Core\User\UserInterface::class)->getMock();
     }
 
     private function getUserMock(): User

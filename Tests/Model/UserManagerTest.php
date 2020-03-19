@@ -11,6 +11,7 @@
 
 namespace FOS\UserBundle\Tests\Model;
 
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManager;
 use FOS\UserBundle\Util\CanonicalFieldsUpdater;
 use FOS\UserBundle\Util\PasswordUpdaterInterface;

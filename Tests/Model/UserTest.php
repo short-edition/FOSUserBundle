@@ -12,6 +12,8 @@
 namespace FOS\UserBundle\Tests\Model;
 
 use DateTime;
+use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
@@ -83,7 +85,7 @@ class UserTest extends TestCase
     {
         $user = $this->getUser();
         $this->assertTrue($user->isEqualTo($user));
-        $this->assertTrue($user->isEqualTo($this->getMockBuilder(User::class)->getMock()));
+        $this->assertFalse($user->isEqualTo($this->getMockBuilder(UserInterface::class)->getMock()));
 
         $user2 = $this->getUser();
         $user2->setPassword('secret');

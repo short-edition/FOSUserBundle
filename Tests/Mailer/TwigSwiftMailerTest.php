@@ -12,6 +12,7 @@
 namespace FOS\UserBundle\Tests\Mailer;
 
 use FOS\UserBundle\Mailer\TwigSwiftMailer;
+use FOS\UserBundle\Model\UserInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swift_Events_EventDispatcher;
@@ -120,7 +121,7 @@ TWIG
 
     private function getUser(string $emailAddress): MockObject
     {
-        $user = $this->getMockBuilder(User::class)->getMock();
+        $user = $this->getMockBuilder(UserInterface::class)->getMock();
         $user->method('getEmail')
             ->willReturn($emailAddress);
 

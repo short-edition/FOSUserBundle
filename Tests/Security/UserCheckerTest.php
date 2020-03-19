@@ -12,6 +12,7 @@
 namespace FOS\UserBundle\Tests\Security;
 
 use Exception;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Security\UserChecker;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Exception\AccountExpiredException;

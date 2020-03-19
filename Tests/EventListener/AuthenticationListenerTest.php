@@ -14,6 +14,7 @@ namespace FOS\UserBundle\Tests\EventListener;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\EventListener\AuthenticationListener;
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Security\LoginManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -36,7 +37,7 @@ class AuthenticationListenerTest extends TestCase
 
     public function setUp(): void
     {
-        $user = $this->getMockBuilder(User::class)->getMock();
+        $user = $this->getMockBuilder(UserInterface::class)->getMock();
 
         $response = $this->getMockBuilder(Response::class)->getMock();
         $request = $this->getMockBuilder(Request::class)->getMock();

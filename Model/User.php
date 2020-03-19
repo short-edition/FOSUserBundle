@@ -22,10 +22,6 @@ use Doctrine\Common\Collections\Collection;
  */
 abstract class User implements UserInterface, GroupableInterface
 {
-    public const ROLE_DEFAULT = 'ROLE_USER';
-
-    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
-
     /**
      * @var mixed
      */

@@ -11,6 +11,8 @@
 
 namespace FOS\UserBundle\Tests\Security;
 
+use FOS\UserBundle\Model\User;
+use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Security\UserProvider;
 use FOS\UserBundle\Tests\TestUser;
@@ -18,7 +20,6 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserProviderTest extends TestCase
 {
@@ -40,7 +41,7 @@ class UserProviderTest extends TestCase
 
     public function testLoadUserByUsername(): void
     {
-        $user = $this->getUserMock();
+        $user = $this->getMockBuilder(UserInterface::class)->getMock();
         $this->userManager->expects($this->once())
             ->method('findUserByUsername')
             ->with('foobar')
@@ -71,7 +72,7 @@ class UserProviderTest extends TestCase
             ->method('getId')
             ->willReturn('123');
 
-        $refreshedUser = $this->getMockBuilder(User::class)->getMock();
+        $refreshedUser = $this->getMockBuilder(UserInterface::class)->getMock();
         $this->userManager->expects($this->once())
             ->method('findUserBy')
             ->with(['id' => '123'])
@@ -104,7 +105,7 @@ class UserProviderTest extends TestCase
     {
         $this->expectException(UnsupportedUserException::class);
 
-        $user = $this->getMockBuilder(UserInterface::class)->getMock();
+        $user = $this->getUserInterfaceMock();
         $this->userManager->expects($this->any())
             ->method('getClass')
             ->willReturn(get_class($user));
@@ -136,5 +137,10 @@ class UserProviderTest extends TestCase
     private function getTestUserMock(): TestUser
     {
         return $this->getMockBuilder(TestUser::class)->getMock();
+    }
+
+    private function getUserInterfaceMock(): \Symfony\Component\Security\Core\User\UserInterface
+    {
+        return $this->getMockBuilder(\Symfony\Component\Security\Core\User\UserInterface::class)->getMock();
     }
 }
