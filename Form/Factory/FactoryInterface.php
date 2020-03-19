@@ -15,8 +15,5 @@ use Symfony\Component\Form\FormInterface;
 
 interface FactoryInterface
 {
-    /**
-     * @return FormInterface
-     */
-    public function createForm();
+    public function createForm(): FormInterface;
 }

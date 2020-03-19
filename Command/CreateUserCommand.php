@@ -11,6 +11,7 @@
 
 namespace FOS\UserBundle\Command;
 
+use Exception;
 use FOS\UserBundle\Util\UserManipulator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -40,7 +41,7 @@ class CreateUserCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('fos:user:create')
@@ -78,7 +79,7 @@ EOT
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $username = $input->getArgument('username');
         $email = $input->getArgument('email');
@@ -96,15 +97,15 @@ EOT
     /**
      * {@inheritdoc}
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $questions = [];
 
         if (!$input->getArgument('username')) {
             $question = new Question('Please choose a username:');
-            $question->setValidator(function ($username) {
+            $question->setValidator(static function ($username) {
                 if (empty($username)) {
-                    throw new \Exception('Username can not be empty');
+                    throw new Exception('Username can not be empty');
                 }
 
                 return $username;
@@ -114,9 +115,9 @@ EOT
 
         if (!$input->getArgument('email')) {
             $question = new Question('Please choose an email:');
-            $question->setValidator(function ($email) {
+            $question->setValidator(static function ($email) {
                 if (empty($email)) {
-                    throw new \Exception('Email can not be empty');
+                    throw new Exception('Email can not be empty');
                 }
 
                 return $email;
@@ -126,9 +127,9 @@ EOT
 
         if (!$input->getArgument('password')) {
             $question = new Question('Please choose a password:');
-            $question->setValidator(function ($password) {
+            $question->setValidator(static function ($password) {
                 if (empty($password)) {
-                    throw new \Exception('Password can not be empty');
+                    throw new Exception('Password can not be empty');
                 }
 
                 return $password;

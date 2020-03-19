@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Security;
 
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -70,7 +70,7 @@ class LoginManager implements LoginManagerInterface
     /**
      * {@inheritdoc}
      */
-    final public function logInUser($firewallName, UserInterface $user, Response $response = null)
+    final public function logInUser($firewallName, User $user, Response $response = null)
     {
         $this->userChecker->checkPreAuth($user);
 
@@ -93,7 +93,7 @@ class LoginManager implements LoginManagerInterface
      *
      * @return UsernamePasswordToken
      */
-    protected function createToken($firewall, UserInterface $user)
+    protected function createToken($firewall, User $user)
     {
         return new UsernamePasswordToken($user, null, $firewall, $user->getRoles());
     }

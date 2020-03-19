@@ -11,9 +11,11 @@
 
 namespace FOS\UserBundle\Mailer;
 
-use FOS\UserBundle\Model\UserInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use FOS\UserBundle\Model\User;
+use Swift_Mailer;
+use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 /**
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
@@ -21,7 +23,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class Mailer implements MailerInterface
 {
     /**
-     * @var \Swift_Mailer
+     * @var Swift_Mailer
      */
     protected $mailer;
 
@@ -41,9 +43,9 @@ class Mailer implements MailerInterface
     protected $parameters;
 
     /**
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      */
-    public function __construct($mailer, UrlGeneratorInterface $router, EngineInterface $templating, array $parameters)
+    public function __construct($mailer, UrlGeneratorInterface $router, Environment $templating, array $parameters)
     {
         $this->mailer = $mailer;
         $this->router = $router;
@@ -54,7 +56,7 @@ class Mailer implements MailerInterface
     /**
      * {@inheritdoc}
      */
-    public function sendConfirmationEmailMessage(UserInterface $user)
+    public function sendConfirmationEmailMessage(User $user): void
     {
         $template = $this->parameters['confirmation.template'];
         $url = $this->router->generate('fos_user_registration_confirm', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -68,7 +70,7 @@ class Mailer implements MailerInterface
     /**
      * {@inheritdoc}
      */
-    public function sendResettingEmailMessage(UserInterface $user)
+    public function sendResettingEmailMessage(User $user): void
     {
         $template = $this->parameters['resetting.template'];
         $url = $this->router->generate('fos_user_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -80,18 +82,18 @@ class Mailer implements MailerInterface
     }
 
     /**
-     * @param string       $renderedTemplate
+     * @param string $renderedTemplate
      * @param array|string $fromEmail
      * @param array|string $toEmail
      */
-    protected function sendEmailMessage($renderedTemplate, $fromEmail, $toEmail)
+    protected function sendEmailMessage(string $renderedTemplate, $fromEmail, $toEmail): void
     {
         // Render the email, use the first line as the subject, and the rest as the body
         $renderedLines = explode("\n", trim($renderedTemplate));
         $subject = array_shift($renderedLines);
         $body = implode("\n", $renderedLines);
 
-        $message = (new \Swift_Message())
+        $message = (new Swift_Message())
             ->setSubject($subject)
             ->setFrom($fromEmail)
             ->setTo($toEmail)

@@ -34,18 +34,17 @@ abstract class UserManager implements UserManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function createUser()
+    public function createUser(): User
     {
         $class = $this->getClass();
-        $user = new $class();
 
-        return $user;
+        return new $class();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findUserByEmail($email)
+    public function findUserByEmail(string $email): ?User
     {
         return $this->findUserBy(['emailCanonical' => $this->canonicalFieldsUpdater->canonicalizeEmail($email)]);
     }
@@ -53,7 +52,7 @@ abstract class UserManager implements UserManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function findUserByUsername($username)
+    public function findUserByUsername(string $username): ?User
     {
         return $this->findUserBy(['usernameCanonical' => $this->canonicalFieldsUpdater->canonicalizeUsername($username)]);
     }
@@ -61,9 +60,9 @@ abstract class UserManager implements UserManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function findUserByUsernameOrEmail($usernameOrEmail)
+    public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
-        if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
+        if (preg_match('/^.+@\S+\.\S+$/', $usernameOrEmail)) {
             $user = $this->findUserByEmail($usernameOrEmail);
             if (null !== $user) {
                 return $user;
@@ -76,7 +75,7 @@ abstract class UserManager implements UserManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function findUserByConfirmationToken($token)
+    public function findUserByConfirmationToken(int $token): ?User
     {
         return $this->findUserBy(['confirmationToken' => $token]);
     }
@@ -84,7 +83,7 @@ abstract class UserManager implements UserManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function updateCanonicalFields(UserInterface $user)
+    public function updateCanonicalFields(User $user): void
     {
         $this->canonicalFieldsUpdater->updateCanonicalFields($user);
     }
@@ -92,23 +91,17 @@ abstract class UserManager implements UserManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function updatePassword(UserInterface $user)
+    public function updatePassword(User $user): void
     {
         $this->passwordUpdater->hashPassword($user);
     }
 
-    /**
-     * @return PasswordUpdaterInterface
-     */
-    protected function getPasswordUpdater()
+    protected function getPasswordUpdater(): PasswordUpdaterInterface
     {
         return $this->passwordUpdater;
     }
 
-    /**
-     * @return CanonicalFieldsUpdater
-     */
-    protected function getCanonicalFieldsUpdater()
+    protected function getCanonicalFieldsUpdater(): CanonicalFieldsUpdater
     {
         return $this->canonicalFieldsUpdater;
     }

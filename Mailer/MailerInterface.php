@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Mailer;
 
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 
 /**
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
@@ -21,10 +21,10 @@ interface MailerInterface
     /**
      * Send an email to a user to confirm the account creation.
      */
-    public function sendConfirmationEmailMessage(UserInterface $user);
+    public function sendConfirmationEmailMessage(User $user): void;
 
     /**
      * Send an email to a user to confirm the password reset.
      */
-    public function sendResettingEmailMessage(UserInterface $user);
+    public function sendResettingEmailMessage(User $user): void;
 }

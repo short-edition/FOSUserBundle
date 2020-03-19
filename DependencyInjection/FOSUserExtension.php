@@ -11,6 +11,8 @@
 
 namespace FOS\UserBundle\DependencyInjection;
 
+use FOS\UserBundle\Doctrine\CouchDB\UserListener;
+use FOS\UserBundle\Model\GroupManagerInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
@@ -36,7 +38,7 @@ class FOSUserExtension extends Extension
         'couchdb' => [
             'registry' => 'doctrine_couchdb',
             'tag' => 'doctrine_couchdb.event_subscriber',
-            'listener_class' => 'FOS\UserBundle\Doctrine\CouchDB\UserListener',
+            'listener_class' => UserListener::class,
         ],
     ];
 
@@ -46,7 +48,7 @@ class FOSUserExtension extends Extension
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $processor = new Processor();
         $configuration = new Configuration();
@@ -147,7 +149,7 @@ class FOSUserExtension extends Extension
         return 'http://friendsofsymfony.github.io/schema/dic/user';
     }
 
-    protected function remapParameters(array $config, ContainerBuilder $container, array $map)
+    protected function remapParameters(array $config, ContainerBuilder $container, array $map): void
     {
         foreach ($map as $name => $paramName) {
             if (array_key_exists($name, $config)) {
@@ -156,7 +158,7 @@ class FOSUserExtension extends Extension
         }
     }
 
-    protected function remapParametersNamespaces(array $config, ContainerBuilder $container, array $namespaces)
+    protected function remapParametersNamespaces(array $config, ContainerBuilder $container, array $namespaces): void
     {
         foreach ($namespaces as $ns => $map) {
             if ($ns) {
@@ -177,7 +179,7 @@ class FOSUserExtension extends Extension
         }
     }
 
-    private function loadProfile(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    private function loadProfile(array $config, ContainerBuilder $container, XmlFileLoader $loader): void
     {
         $loader->load('profile.xml');
 
@@ -186,7 +188,7 @@ class FOSUserExtension extends Extension
         ]);
     }
 
-    private function loadRegistration(array $config, ContainerBuilder $container, XmlFileLoader $loader, array $fromEmail)
+    private function loadRegistration(array $config, ContainerBuilder $container, XmlFileLoader $loader, array $fromEmail): void
     {
         $loader->load('registration.xml');
         $this->sessionNeeded = true;
@@ -209,7 +211,7 @@ class FOSUserExtension extends Extension
         ]);
     }
 
-    private function loadChangePassword(array $config, ContainerBuilder $container, XmlFileLoader $loader)
+    private function loadChangePassword(array $config, ContainerBuilder $container, XmlFileLoader $loader): void
     {
         $loader->load('change_password.xml');
 
@@ -218,7 +220,7 @@ class FOSUserExtension extends Extension
         ]);
     }
 
-    private function loadResetting(array $config, ContainerBuilder $container, XmlFileLoader $loader, array $fromEmail)
+    private function loadResetting(array $config, ContainerBuilder $container, XmlFileLoader $loader, array $fromEmail): void
     {
         $this->mailerNeeded = true;
         $loader->load('resetting.xml');
@@ -240,10 +242,7 @@ class FOSUserExtension extends Extension
         ]);
     }
 
-    /**
-     * @param string $dbDriver
-     */
-    private function loadGroups(array $config, ContainerBuilder $container, XmlFileLoader $loader, $dbDriver)
+    private function loadGroups(array $config, ContainerBuilder $container, XmlFileLoader $loader, string $dbDriver): void
     {
         $loader->load('group.xml');
         if ('custom' !== $dbDriver) {
@@ -255,7 +254,7 @@ class FOSUserExtension extends Extension
         }
 
         $container->setAlias('fos_user.group_manager', new Alias($config['group_manager'], true));
-        $container->setAlias('FOS\UserBundle\Model\GroupManagerInterface', new Alias('fos_user.group_manager', false));
+        $container->setAlias(GroupManagerInterface::class, new Alias('fos_user.group_manager', false));
 
         $this->remapParametersNamespaces($config, $container, [
             '' => [

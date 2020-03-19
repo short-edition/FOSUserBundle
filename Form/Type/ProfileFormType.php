@@ -74,20 +74,10 @@ class ProfileFormType extends AbstractType
         ]);
     }
 
-    // BC for SF < 3.0
-
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'fos_user_profile';
     }
@@ -95,11 +85,10 @@ class ProfileFormType extends AbstractType
     /**
      * Builds the embedded form representing the user.
      */
-    protected function buildUserForm(FormBuilderInterface $builder, array $options)
+    protected function buildUserForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username', null, ['label' => 'form.username', 'translation_domain' => 'FOSUserBundle'])
-            ->add('email', EmailType::class, ['label' => 'form.email', 'translation_domain' => 'FOSUserBundle'])
-        ;
+            ->add('email', EmailType::class, ['label' => 'form.email', 'translation_domain' => 'FOSUserBundle']);
     }
 }

@@ -35,7 +35,7 @@ abstract class Group implements GroupInterface
      * Group constructor.
      *
      * @param string $name
-     * @param array  $roles
+     * @param array $roles
      */
     public function __construct($name, $roles = [])
     {
@@ -46,7 +46,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function addRole($role)
+    public function addRole($role): GroupInterface
     {
         if (!$this->hasRole($role)) {
             $this->roles[] = strtoupper($role);
@@ -66,7 +66,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -74,7 +74,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function hasRole($role)
+    public function hasRole($role): bool
     {
         return in_array(strtoupper($role), $this->roles, true);
     }
@@ -82,7 +82,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -90,7 +90,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function removeRole($role)
+    public function removeRole($role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -103,7 +103,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -113,7 +113,7 @@ abstract class Group implements GroupInterface
     /**
      * {@inheritdoc}
      */
-    public function setRoles(array $roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 

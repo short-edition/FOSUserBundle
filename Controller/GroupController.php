@@ -19,12 +19,12 @@ use FOS\UserBundle\Form\Factory\FactoryInterface;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\GroupManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * RESTful controller managing group CRUD.
@@ -34,7 +34,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @final
  */
-class GroupController extends Controller
+class GroupController extends AbstractController
 {
     private $eventDispatcher;
     private $formFactory;
@@ -47,43 +47,26 @@ class GroupController extends Controller
         $this->groupManager = $groupManager;
     }
 
-    /**
-     * Show all groups.
-     */
-    public function listAction()
+    public function listAction(): Response
     {
         return $this->render('@FOSUser/Group/list.html.twig', [
             'groups' => $this->groupManager->findGroups(),
         ]);
     }
 
-    /**
-     * Show one group.
-     *
-     * @param string $groupName
-     *
-     * @return Response
-     */
-    public function showAction($groupName)
+    public function showAction(string $groupName): Response
     {
         return $this->render('@FOSUser/Group/show.html.twig', [
             'group' => $this->findGroupBy('name', $groupName),
         ]);
     }
 
-    /**
-     * Edit one group, show the edit form.
-     *
-     * @param string $groupName
-     *
-     * @return Response
-     */
-    public function editAction(Request $request, $groupName)
+    public function editAction(Request $request, string $groupName): Response
     {
         $group = $this->findGroupBy('name', $groupName);
 
         $event = new GetResponseGroupEvent($group, $request);
-        $this->eventDispatcher->dispatch(FOSUserEvents::GROUP_EDIT_INITIALIZE, $event);
+        $this->eventDispatcher->dispatch($event, FOSUserEvents::GROUP_EDIT_INITIALIZE);
 
         if (null !== $event->getResponse()) {
             return $event->getResponse();
@@ -96,7 +79,7 @@ class GroupController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event = new FormEvent($form, $request);
-            $this->eventDispatcher->dispatch(FOSUserEvents::GROUP_EDIT_SUCCESS, $event);
+            $this->eventDispatcher->dispatch($event, FOSUserEvents::GROUP_EDIT_SUCCESS);
 
             $this->groupManager->updateGroup($group);
 
@@ -105,7 +88,7 @@ class GroupController extends Controller
                 $response = new RedirectResponse($url);
             }
 
-            $this->eventDispatcher->dispatch(FOSUserEvents::GROUP_EDIT_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
+            $this->eventDispatcher->dispatch(new FilterGroupResponseEvent($group, $request, $response), FOSUserEvents::GROUP_EDIT_COMPLETED);
 
             return $response;
         }
@@ -116,16 +99,11 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * Show the new form.
-     *
-     * @return Response
-     */
-    public function newAction(Request $request)
+    public function newAction(Request $request): Response
     {
         $group = $this->groupManager->createGroup('');
 
-        $this->eventDispatcher->dispatch(FOSUserEvents::GROUP_CREATE_INITIALIZE, new GroupEvent($group, $request));
+        $this->eventDispatcher->dispatch(new GroupEvent($group, $request), FOSUserEvents::GROUP_CREATE_INITIALIZE);
 
         $form = $this->formFactory->createForm();
         $form->setData($group);
@@ -134,7 +112,7 @@ class GroupController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event = new FormEvent($form, $request);
-            $this->eventDispatcher->dispatch(FOSUserEvents::GROUP_CREATE_SUCCESS, $event);
+            $this->eventDispatcher->dispatch($event, FOSUserEvents::GROUP_CREATE_SUCCESS);
 
             $this->groupManager->updateGroup($group);
 
@@ -143,7 +121,7 @@ class GroupController extends Controller
                 $response = new RedirectResponse($url);
             }
 
-            $this->eventDispatcher->dispatch(FOSUserEvents::GROUP_CREATE_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
+            $this->eventDispatcher->dispatch(new FilterGroupResponseEvent($group, $request, $response), FOSUserEvents::GROUP_CREATE_COMPLETED);
 
             return $response;
         }
@@ -153,36 +131,20 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * Delete one group.
-     *
-     * @param string $groupName
-     *
-     * @return RedirectResponse
-     */
-    public function deleteAction(Request $request, $groupName)
+    public function deleteAction(Request $request, string $groupName): RedirectResponse
     {
         $group = $this->findGroupBy('name', $groupName);
         $this->groupManager->deleteGroup($group);
 
         $response = new RedirectResponse($this->generateUrl('fos_user_group_list'));
 
-        $this->eventDispatcher->dispatch(FOSUserEvents::GROUP_DELETE_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
+        $this->eventDispatcher->dispatch(new FilterGroupResponseEvent($group, $request, $response), FOSUserEvents::GROUP_DELETE_COMPLETED);
 
         return $response;
     }
 
-    /**
-     * Find a group by a specific property.
-     *
-     * @param string $key   property name
-     * @param mixed  $value property value
-     *
-     * @throws NotFoundHttpException if user does not exist
-     *
-     * @return GroupInterface
-     */
-    protected function findGroupBy($key, $value)
+    /** Find a group by a specific property. */
+    protected function findGroupBy(string $key, $value): GroupInterface
     {
         if (!empty($value)) {
             $group = $this->groupManager->{'findGroupBy'.ucfirst($key)}($value);

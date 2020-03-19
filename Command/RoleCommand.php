@@ -11,7 +11,10 @@
 
 namespace FOS\UserBundle\Command;
 
+use Exception;
 use FOS\UserBundle\Util\UserManipulator;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,7 +39,7 @@ abstract class RoleCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDefinition([
@@ -49,18 +52,18 @@ abstract class RoleCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $username = $input->getArgument('username');
         $role = $input->getArgument('role');
         $super = (true === $input->getOption('super'));
 
         if (null !== $role && $super) {
-            throw new \InvalidArgumentException('You can pass either the role or the --super option (but not both simultaneously).');
+            throw new InvalidArgumentException('You can pass either the role or the --super option (but not both simultaneously).');
         }
 
         if (null === $role && !$super) {
-            throw new \RuntimeException('Not enough arguments.');
+            throw new RuntimeException('Not enough arguments.');
         }
 
         $manipulator = $this->userManipulator;
@@ -70,26 +73,25 @@ abstract class RoleCommand extends Command
     }
 
     /**
-     * @see Command
-     *
      * @param string $username
-     * @param bool   $super
+     * @param bool $super
      * @param string $role
+     * @see Command
      */
-    abstract protected function executeRoleCommand(UserManipulator $manipulator, OutputInterface $output, $username, $super, $role);
+    abstract protected function executeRoleCommand(UserManipulator $manipulator, OutputInterface $output, $username, $super, $role): void;
 
     /**
      * {@inheritdoc}
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $questions = [];
 
         if (!$input->getArgument('username')) {
             $question = new Question('Please choose a username:');
-            $question->setValidator(function ($username) {
+            $question->setValidator(static function ($username) {
                 if (empty($username)) {
-                    throw new \Exception('Username can not be empty');
+                    throw new Exception('Username can not be empty');
                 }
 
                 return $username;
@@ -99,9 +101,9 @@ abstract class RoleCommand extends Command
 
         if ((true !== $input->getOption('super')) && !$input->getArgument('role')) {
             $question = new Question('Please choose a role:');
-            $question->setValidator(function ($role) {
+            $question->setValidator(static function ($role) {
                 if (empty($role)) {
-                    throw new \Exception('Role can not be empty');
+                    throw new Exception('Role can not be empty');
                 }
 
                 return $role;

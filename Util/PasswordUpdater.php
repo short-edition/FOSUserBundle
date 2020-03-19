@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Util;
 
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\SelfSaltingEncoderInterface;
@@ -30,7 +30,7 @@ class PasswordUpdater implements PasswordUpdaterInterface
         $this->encoderFactory = $encoderFactory;
     }
 
-    public function hashPassword(UserInterface $user)
+    public function hashPassword(User $user): void
     {
         $plainPassword = $user->getPlainPassword();
 

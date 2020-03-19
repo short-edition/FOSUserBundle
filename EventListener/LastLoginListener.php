@@ -11,9 +11,10 @@
 
 namespace FOS\UserBundle\EventListener;
 
+use DateTime;
 use FOS\UserBundle\Event\UserEvent;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -34,7 +35,7 @@ class LastLoginListener implements EventSubscriberInterface
     /**
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
@@ -42,20 +43,20 @@ class LastLoginListener implements EventSubscriberInterface
         ];
     }
 
-    public function onImplicitLogin(UserEvent $event)
+    public function onImplicitLogin(UserEvent $event): void
     {
         $user = $event->getUser();
 
-        $user->setLastLogin(new \DateTime());
+        $user->setLastLogin(new DateTime());
         $this->userManager->updateUser($user);
     }
 
-    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
+    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event): void
     {
         $user = $event->getAuthenticationToken()->getUser();
 
-        if ($user instanceof UserInterface) {
-            $user->setLastLogin(new \DateTime());
+        if ($user instanceof User) {
+            $user->setLastLogin(new DateTime());
             $this->userManager->updateUser($user);
         }
     }

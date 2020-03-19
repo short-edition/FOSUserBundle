@@ -11,6 +11,7 @@
 
 namespace FOS\UserBundle\Command;
 
+use Exception;
 use FOS\UserBundle\Util\UserManipulator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,7 +38,7 @@ class ActivateUserCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('fos:user:activate')
@@ -56,7 +57,7 @@ EOT
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $username = $input->getArgument('username');
 
@@ -70,13 +71,13 @@ EOT
     /**
      * {@inheritdoc}
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         if (!$input->getArgument('username')) {
             $question = new Question('Please choose a username:');
-            $question->setValidator(function ($username) {
+            $question->setValidator(static function ($username) {
                 if (empty($username)) {
-                    throw new \Exception('Username can not be empty');
+                    throw new Exception('Username can not be empty');
                 }
 
                 return $username;

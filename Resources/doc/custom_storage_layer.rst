@@ -9,7 +9,7 @@ Implementing a new storage layer requires providing two classes: the user
 implementation and the corresponding user manager (you will of course need
 two other classes if you want to use the groups).
 
-The user implementation must implement ``FOS\UserBundle\Model\UserInterface``
+The user implementation must implement ``FOS\UserBundle\Model\User``
 and the user manager must implement ``FOS\UserBundle\Model\UserManagerInterface``.
 The ``FOS\UserBundle\Model`` namespace provides base classes to make it easier to
 implement these interfaces.

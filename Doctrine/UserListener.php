@@ -16,7 +16,7 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\EntityManager;
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Util\CanonicalFieldsUpdater;
 use FOS\UserBundle\Util\PasswordUpdaterInterface;
 
@@ -40,7 +40,7 @@ class UserListener implements EventSubscriber
     /**
      * {@inheritdoc}
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             'prePersist',
@@ -51,10 +51,10 @@ class UserListener implements EventSubscriber
     /**
      * Pre persist listener based on doctrine common.
      */
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $object = $args->getObject();
-        if ($object instanceof UserInterface) {
+        if ($object instanceof User) {
             $this->updateUserFields($object);
         }
     }
@@ -62,10 +62,10 @@ class UserListener implements EventSubscriber
     /**
      * Pre update listener based on doctrine common.
      */
-    public function preUpdate(LifecycleEventArgs $args)
+    public function preUpdate(LifecycleEventArgs $args): void
     {
         $object = $args->getObject();
-        if ($object instanceof UserInterface) {
+        if ($object instanceof User) {
             $this->updateUserFields($object);
             $this->recomputeChangeSet($args->getObjectManager(), $object);
         }
@@ -74,7 +74,7 @@ class UserListener implements EventSubscriber
     /**
      * Updates the user properties.
      */
-    private function updateUserFields(UserInterface $user)
+    private function updateUserFields(User $user): void
     {
         $this->canonicalFieldsUpdater->updateCanonicalFields($user);
         $this->passwordUpdater->hashPassword($user);
@@ -83,7 +83,7 @@ class UserListener implements EventSubscriber
     /**
      * Recomputes change set for Doctrine implementations not doing it automatically after the event.
      */
-    private function recomputeChangeSet(ObjectManager $om, UserInterface $user)
+    private function recomputeChangeSet(ObjectManager $om, User $user): void
     {
         $meta = $om->getClassMetadata(get_class($user));
 

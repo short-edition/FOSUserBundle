@@ -52,8 +52,7 @@ class RegistrationFormType extends AbstractType
                 'first_options' => ['label' => 'form.password'],
                 'second_options' => ['label' => 'form.password_confirmation'],
                 'invalid_message' => 'fos_user.password.mismatch',
-            ])
-        ;
+            ]);
     }
 
     /**
@@ -67,20 +66,10 @@ class RegistrationFormType extends AbstractType
         ]);
     }
 
-    // BC for SF < 3.0
-
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'fos_user_registration';
     }

@@ -49,20 +49,10 @@ class GroupFormType extends AbstractType
         ]);
     }
 
-    // BC for SF < 3.0
-
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'fos_user_group';
     }

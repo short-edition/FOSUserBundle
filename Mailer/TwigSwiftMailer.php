@@ -11,7 +11,9 @@
 
 namespace FOS\UserBundle\Mailer;
 
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
+use Swift_Mailer;
+use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
@@ -21,7 +23,7 @@ use Twig\Environment;
 class TwigSwiftMailer implements MailerInterface
 {
     /**
-     * @var \Swift_Mailer
+     * @var Swift_Mailer
      */
     protected $mailer;
 
@@ -40,7 +42,7 @@ class TwigSwiftMailer implements MailerInterface
      */
     protected $parameters;
 
-    public function __construct(\Swift_Mailer $mailer, UrlGeneratorInterface $router, Environment $twig, array $parameters)
+    public function __construct(Swift_Mailer $mailer, UrlGeneratorInterface $router, Environment $twig, array $parameters)
     {
         $this->mailer = $mailer;
         $this->router = $router;
@@ -51,7 +53,7 @@ class TwigSwiftMailer implements MailerInterface
     /**
      * {@inheritdoc}
      */
-    public function sendConfirmationEmailMessage(UserInterface $user)
+    public function sendConfirmationEmailMessage(User $user): void
     {
         $template = $this->parameters['template']['confirmation'];
         $url = $this->router->generate('fos_user_registration_confirm', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -67,7 +69,7 @@ class TwigSwiftMailer implements MailerInterface
     /**
      * {@inheritdoc}
      */
-    public function sendResettingEmailMessage(UserInterface $user)
+    public function sendResettingEmailMessage(User $user): void
     {
         $template = $this->parameters['template']['resetting'];
         $url = $this->router->generate('fos_user_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -82,11 +84,11 @@ class TwigSwiftMailer implements MailerInterface
 
     /**
      * @param string $templateName
-     * @param array  $context
-     * @param array  $fromEmail
+     * @param array $context
+     * @param array $fromEmail
      * @param string $toEmail
      */
-    protected function sendMessage($templateName, $context, $fromEmail, $toEmail)
+    protected function sendMessage($templateName, $context, $fromEmail, $toEmail): void
     {
         $template = $this->twig->load($templateName);
         $subject = $template->renderBlock('subject', $context);
@@ -98,7 +100,7 @@ class TwigSwiftMailer implements MailerInterface
             $htmlBody = $template->renderBlock('body_html', $context);
         }
 
-        $message = (new \Swift_Message())
+        $message = (new Swift_Message())
             ->setSubject($subject)
             ->setFrom($fromEmail)
             ->setTo($toEmail);

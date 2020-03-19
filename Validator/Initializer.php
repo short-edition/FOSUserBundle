@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Validator;
 
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Util\CanonicalFieldsUpdater;
 use Symfony\Component\Validator\ObjectInitializerInterface;
 
@@ -32,9 +32,9 @@ class Initializer implements ObjectInitializerInterface
     /**
      * @param object $object
      */
-    public function initialize($object)
+    public function initialize($object): void
     {
-        if ($object instanceof UserInterface) {
+        if ($object instanceof User) {
             $this->canonicalFieldsUpdater->updateCanonicalFields($object);
         }
     }

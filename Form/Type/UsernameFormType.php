@@ -17,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Form type for representing a UserInterface instance by its username string.
+ * Form type for representing a User instance by its username string.
  *
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  */
@@ -52,20 +52,10 @@ class UsernameFormType extends AbstractType
         return TextType::class;
     }
 
-    // BC for SF < 3.0
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
-    }
-
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'fos_user_username';
     }

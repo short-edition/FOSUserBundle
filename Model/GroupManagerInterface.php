@@ -23,50 +23,36 @@ interface GroupManagerInterface
 {
     /**
      * Returns an empty group instance.
-     *
-     * @param string $name
-     *
-     * @return GroupInterface
      */
-    public function createGroup($name);
+    public function createGroup(string $name): GroupInterface;
 
     /**
      * Deletes a group.
      */
-    public function deleteGroup(GroupInterface $group);
+    public function deleteGroup(GroupInterface $group): void;
 
     /**
      * Finds one group by the given criteria.
-     *
-     * @return GroupInterface
      */
-    public function findGroupBy(array $criteria);
+    public function findGroupBy(array $criteria): GroupInterface;
 
     /**
      * Finds a group by name.
-     *
-     * @param string $name
-     *
-     * @return GroupInterface
      */
-    public function findGroupByName($name);
+    public function findGroupByName(string $name): GroupInterface;
 
     /**
      * Returns a collection with all group instances.
-     *
-     * @return \Traversable
      */
-    public function findGroups();
+    public function findGroups(): array;
 
     /**
      * Returns the group's fully qualified class name.
-     *
-     * @return string
      */
-    public function getClass();
+    public function getClass(): string;
 
     /**
      * Updates a group.
      */
-    public function updateGroup(GroupInterface $group);
+    public function updateGroup(GroupInterface $group): void;
 }

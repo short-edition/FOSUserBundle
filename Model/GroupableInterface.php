@@ -20,38 +20,26 @@ interface GroupableInterface
 {
     /**
      * Gets the groups granted to the user.
-     *
-     * @return \Traversable
      */
-    public function getGroups();
+    public function getGroups(): array;
 
     /**
      * Gets the name of the groups which includes the user.
-     *
-     * @return array
      */
-    public function getGroupNames();
+    public function getGroupNames(): array;
 
     /**
      * Indicates whether the user belongs to the specified group or not.
-     *
-     * @param string $name Name of the group
-     *
-     * @return bool
      */
-    public function hasGroup($name);
+    public function hasGroup(string $name): bool;
 
     /**
      * Add a group to the user groups.
-     *
-     * @return static
      */
     public function addGroup(GroupInterface $group);
 
     /**
      * Remove a group from the user groups.
-     *
-     * @return static
      */
     public function removeGroup(GroupInterface $group);
 }

@@ -11,7 +11,8 @@
 
 namespace FOS\UserBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use RuntimeException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -27,7 +28,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  *
  * @final
  */
-class SecurityController extends Controller
+class SecurityController extends AbstractController
 {
     private $tokenManager;
 
@@ -36,10 +37,7 @@ class SecurityController extends Controller
         $this->tokenManager = $tokenManager;
     }
 
-    /**
-     * @return Response
-     */
-    public function loginAction(Request $request)
+    public function loginAction(Request $request): Response
     {
         /** @var $session Session */
         $session = $request->getSession();
@@ -75,23 +73,21 @@ class SecurityController extends Controller
         ]);
     }
 
-    public function checkAction()
+    public function checkAction(): void
     {
-        throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
+        throw new RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
     }
 
-    public function logoutAction()
+    public function logoutAction(): void
     {
-        throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+        throw new RuntimeException('You must activate the logout in your security firewall configuration.');
     }
 
     /**
      * Renders the login template with the given parameters. Overwrite this function in
      * an extended controller to provide additional data for the login template.
-     *
-     * @return Response
      */
-    protected function renderLogin(array $data)
+    protected function renderLogin(array $data): Response
     {
         return $this->render('@FOSUser/Security/login.html.twig', $data);
     }

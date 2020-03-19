@@ -13,7 +13,7 @@ namespace FOS\UserBundle\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManager as BaseUserManager;
 use FOS\UserBundle\Util\CanonicalFieldsUpdater;
 use FOS\UserBundle\Util\PasswordUpdaterInterface;
@@ -46,7 +46,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function deleteUser(UserInterface $user)
+    public function deleteUser(User $user): void
     {
         $this->objectManager->remove($user);
         $this->objectManager->flush();
@@ -55,7 +55,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function getClass()
+    public function getClass(): string
     {
         if (false !== strpos($this->class, ':')) {
             $metadata = $this->objectManager->getClassMetadata($this->class);
@@ -68,7 +68,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function findUserBy(array $criteria)
+    public function findUserBy(array $criteria): ?User
     {
         return $this->getRepository()->findOneBy($criteria);
     }
@@ -76,7 +76,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function findUsers()
+    public function findUsers(): array
     {
         return $this->getRepository()->findAll();
     }
@@ -84,7 +84,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function reloadUser(UserInterface $user)
+    public function reloadUser(User $user): void
     {
         $this->objectManager->refresh($user);
     }
@@ -92,7 +92,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function updateUser(UserInterface $user, $andFlush = true)
+    public function updateUser(User $user, $andFlush = true): void
     {
         $this->updateCanonicalFields($user);
         $this->updatePassword($user);
@@ -103,10 +103,7 @@ class UserManager extends BaseUserManager
         }
     }
 
-    /**
-     * @return ObjectRepository
-     */
-    protected function getRepository()
+    protected function getRepository(): ObjectRepository
     {
         return $this->objectManager->getRepository($this->getClass());
     }

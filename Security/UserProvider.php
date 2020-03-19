@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Security;
 
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -52,7 +52,7 @@ class UserProvider implements UserProviderInterface
      */
     public function refreshUser(SecurityUserInterface $user)
     {
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\UserInterface, but got "%s".', get_class($user)));
         }
 
@@ -84,7 +84,7 @@ class UserProvider implements UserProviderInterface
      *
      * @param string $username
      *
-     * @return UserInterface|null
+     * @return User|null
      */
     protected function findUser($username)
     {

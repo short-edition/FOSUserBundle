@@ -28,92 +28,66 @@ interface UserManagerInterface
 {
     /**
      * Creates an empty user instance.
-     *
-     * @return UserInterface
      */
-    public function createUser();
+    public function createUser(): User;
 
     /**
      * Deletes a user.
      */
-    public function deleteUser(UserInterface $user);
+    public function deleteUser(User $user): void;
 
     /**
      * Finds one user by the given criteria.
-     *
-     * @return UserInterface|null
      */
-    public function findUserBy(array $criteria);
+    public function findUserBy(array $criteria): ?User;
 
     /**
      * Find a user by its username.
-     *
-     * @param string $username
-     *
-     * @return UserInterface|null
      */
-    public function findUserByUsername($username);
+    public function findUserByUsername(string $username): ?User;
 
     /**
      * Finds a user by its email.
-     *
-     * @param string $email
-     *
-     * @return UserInterface|null
      */
-    public function findUserByEmail($email);
+    public function findUserByEmail(string $email): ?User;
 
     /**
      * Finds a user by its username or email.
-     *
-     * @param string $usernameOrEmail
-     *
-     * @return UserInterface|null
      */
-    public function findUserByUsernameOrEmail($usernameOrEmail);
+    public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User;
 
     /**
      * Finds a user by its confirmationToken.
-     *
-     * @param string $token
-     *
-     * @return UserInterface|null
      */
-    public function findUserByConfirmationToken($token);
+    public function findUserByConfirmationToken(int $token): ?User;
 
     /**
      * Returns a collection with all user instances.
-     *
-     * @return \Traversable
      */
-    public function findUsers();
+    public function findUsers(): array;
 
     /**
      * Returns the user's fully qualified class name.
-     *
-     * @return string
      */
-    public function getClass();
+    public function getClass(): string;
 
     /**
      * Reloads a user.
      */
-    public function reloadUser(UserInterface $user);
+    public function reloadUser(User $user): void;
 
     /**
      * Updates a user.
-     *
-     * @param bool $andFlush
      */
-    public function updateUser(UserInterface $user, $andFlush = true);
+    public function updateUser(User $user, bool $andFlush = true): void;
 
     /**
      * Updates the canonical username and email fields for a user.
      */
-    public function updateCanonicalFields(UserInterface $user);
+    public function updateCanonicalFields(User $user): void;
 
     /**
      * Updates a user password if a plain password is set.
      */
-    public function updatePassword(UserInterface $user);
+    public function updatePassword(User $user): void;
 }

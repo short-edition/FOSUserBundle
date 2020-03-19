@@ -12,6 +12,7 @@
 namespace FOS\UserBundle\Form\Factory;
 
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 class FormFactory implements FactoryInterface
 {
@@ -40,7 +41,7 @@ class FormFactory implements FactoryInterface
      *
      * @param string $name
      * @param string $type
-     * @param array  $validationGroups
+     * @param array $validationGroups
      */
     public function __construct(FormFactoryInterface $formFactory, $name, $type, array $validationGroups = null)
     {
@@ -53,7 +54,7 @@ class FormFactory implements FactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createForm(array $options = [])
+    public function createForm(array $options = []): FormInterface
     {
         $options = array_merge(['validation_groups' => $this->validationGroups], $options);
 

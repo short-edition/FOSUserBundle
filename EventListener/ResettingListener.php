@@ -14,6 +14,7 @@ namespace FOS\UserBundle\EventListener;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Model\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -35,7 +36,7 @@ class ResettingListener implements EventSubscriberInterface
      *
      * @param int $tokenTtl
      */
-    public function __construct(UrlGeneratorInterface $router, $tokenTtl)
+    public function __construct(UrlGeneratorInterface $router, int $tokenTtl)
     {
         $this->router = $router;
         $this->tokenTtl = $tokenTtl;
@@ -44,7 +45,7 @@ class ResettingListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FOSUserEvents::RESETTING_RESET_INITIALIZE => 'onResettingResetInitialize',
@@ -53,16 +54,16 @@ class ResettingListener implements EventSubscriberInterface
         ];
     }
 
-    public function onResettingResetInitialize(GetResponseUserEvent $event)
+    public function onResettingResetInitialize(GetResponseUserEvent $event): void
     {
         if (!$event->getUser()->isPasswordRequestNonExpired($this->tokenTtl)) {
             $event->setResponse(new RedirectResponse($this->router->generate('fos_user_resetting_request')));
         }
     }
 
-    public function onResettingResetSuccess(FormEvent $event)
+    public function onResettingResetSuccess(FormEvent $event): void
     {
-        /** @var $user \FOS\UserBundle\Model\UserInterface */
+        /** @var $user User */
         $user = $event->getForm()->getData();
 
         $user->setConfirmationToken(null);
@@ -70,7 +71,7 @@ class ResettingListener implements EventSubscriberInterface
         $user->setEnabled(true);
     }
 
-    public function onResettingResetRequest(GetResponseUserEvent $event)
+    public function onResettingResetRequest(GetResponseUserEvent $event): void
     {
         if (!$event->getUser()->isAccountNonLocked()) {
             $event->setResponse(new RedirectResponse($this->router->generate('fos_user_resetting_request')));

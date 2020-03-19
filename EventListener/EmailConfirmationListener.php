@@ -14,6 +14,7 @@ namespace FOS\UserBundle\EventListener;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -41,16 +42,16 @@ class EmailConfirmationListener implements EventSubscriberInterface
     /**
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess',
         ];
     }
 
-    public function onRegistrationSuccess(FormEvent $event)
+    public function onRegistrationSuccess(FormEvent $event): void
     {
-        /** @var $user \FOS\UserBundle\Model\UserInterface */
+        /** @var $user User */
         $user = $event->getForm()->getData();
 
         $user->setEnabled(false);

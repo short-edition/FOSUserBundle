@@ -326,7 +326,7 @@ value of the bundle, the config should look like this to reuse the same settings
 #app/config/security.yml
 security:
     encoders:
-        "FOS\UserBundle\Model\UserInterface":
+        "FOS\UserBundle\Model\User":
             algorithm: sha512
             encode_as_base64: false
             iterations: 1

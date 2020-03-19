@@ -12,10 +12,11 @@
 namespace FOS\UserBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
-use Symfony\Component\EventDispatcher\Event;
+use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FlashListener implements EventSubscriberInterface
 {
@@ -54,7 +55,7 @@ class FlashListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FOSUserEvents::CHANGE_PASSWORD_COMPLETED => 'addSuccessFlash',
@@ -67,24 +68,16 @@ class FlashListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param string $eventName
-     */
-    public function addSuccessFlash(Event $event, $eventName)
+    public function addSuccessFlash(Event $event, string $eventName): void
     {
         if (!isset(self::$successMessages[$eventName])) {
-            throw new \InvalidArgumentException('This event does not correspond to a known flash message');
+            throw new InvalidArgumentException('This event does not correspond to a known flash message');
         }
 
         $this->session->getFlashBag()->add('success', $this->trans(self::$successMessages[$eventName]));
     }
 
-    /**
-     * @param string$message
-     *
-     * @return string
-     */
-    private function trans($message, array $params = [])
+    private function trans(string $message, array $params = []): string
     {
         return $this->translator->trans($message, $params, 'FOSUserBundle');
     }

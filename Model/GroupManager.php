@@ -22,7 +22,7 @@ abstract class GroupManager implements GroupManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function createGroup($name)
+    public function createGroup(string $name): GroupInterface
     {
         $class = $this->getClass();
 
@@ -32,7 +32,7 @@ abstract class GroupManager implements GroupManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function findGroupByName($name)
+    public function findGroupByName($name): GroupInterface
     {
         return $this->findGroupBy(['name' => $name]);
     }

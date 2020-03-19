@@ -11,6 +11,7 @@
 
 namespace FOS\UserBundle\DependencyInjection\Compiler;
 
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Flex\Recipe;
@@ -25,7 +26,7 @@ class CheckForMailerPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         // if the mailer isn't needed, then no error needed
         if (!$container->has('fos_user.mailer')) {
@@ -44,7 +45,7 @@ class CheckForMailerPass implements CompilerPassInterface
                 $message .= ' Run "composer require swiftmailer-bundle" to install SwiftMailer or configure a different mailer in "config/packages/fos_user.yaml".';
             }
 
-            throw new \LogicException($message);
+            throw new LogicException($message);
         }
     }
 }

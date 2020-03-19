@@ -13,9 +13,11 @@ namespace FOS\UserBundle\Util;
 
 use FOS\UserBundle\Event\UserEvent;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManagerInterface;
+use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -59,12 +61,12 @@ class UserManipulator
      * @param string $username
      * @param string $password
      * @param string $email
-     * @param bool   $active
-     * @param bool   $superadmin
+     * @param bool $active
+     * @param bool $superadmin
      *
-     * @return \FOS\UserBundle\Model\UserInterface
+     * @return User
      */
-    public function create($username, $password, $email, $active, $superadmin)
+    public function create($username, $password, $email, $active, $superadmin): User
     {
         $user = $this->userManager->createUser();
         $user->setUsername($username);
@@ -75,96 +77,80 @@ class UserManipulator
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch(FOSUserEvents::USER_CREATED, $event);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_CREATED);
 
         return $user;
     }
 
     /**
      * Activates the given user.
-     *
-     * @param string $username
      */
-    public function activate($username)
+    public function activate(string $username): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setEnabled(true);
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch(FOSUserEvents::USER_ACTIVATED, $event);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_ACTIVATED);
     }
 
     /**
      * Deactivates the given user.
-     *
-     * @param string $username
      */
-    public function deactivate($username)
+    public function deactivate(string $username): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setEnabled(false);
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch(FOSUserEvents::USER_DEACTIVATED, $event);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_DEACTIVATED);
     }
 
     /**
      * Changes the password for the given user.
-     *
-     * @param string $username
-     * @param string $password
      */
-    public function changePassword($username, $password)
+    public function changePassword(string $username, string $password): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setPlainPassword($password);
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch(FOSUserEvents::USER_PASSWORD_CHANGED, $event);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_PASSWORD_CHANGED);
     }
 
     /**
      * Promotes the given user.
-     *
-     * @param string $username
      */
-    public function promote($username)
+    public function promote(string $username): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setSuperAdmin(true);
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch(FOSUserEvents::USER_PROMOTED, $event);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_PROMOTED);
     }
 
     /**
      * Demotes the given user.
-     *
-     * @param string $username
      */
-    public function demote($username)
+    public function demote(string $username): void
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         $user->setSuperAdmin(false);
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch(FOSUserEvents::USER_DEMOTED, $event);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_DEMOTED);
     }
 
     /**
      * Adds role to the given user.
-     *
-     * @param string $username
-     * @param string $role
-     *
-     * @return bool true if role was added, false if user already had the role
      */
-    public function addRole($username, $role)
+    public function addRole(string $username, string $role): bool
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         if ($user->hasRole($role)) {
@@ -178,13 +164,8 @@ class UserManipulator
 
     /**
      * Removes role from the given user.
-     *
-     * @param string $username
-     * @param string $role
-     *
-     * @return bool true if role was removed, false if user didn't have the role
      */
-    public function removeRole($username, $role)
+    public function removeRole(string $username, string $role): bool
     {
         $user = $this->findUserByUsernameOrThrowException($username);
         if (!$user->hasRole($role)) {
@@ -201,25 +182,22 @@ class UserManipulator
      *
      * @param string $username
      *
-     * @throws \InvalidArgumentException When user does not exist
+     * @return User
+     * @throws InvalidArgumentException When user does not exist
      *
-     * @return UserInterface
      */
-    private function findUserByUsernameOrThrowException($username)
+    private function findUserByUsernameOrThrowException($username): User
     {
         $user = $this->userManager->findUserByUsername($username);
 
         if (!$user) {
-            throw new \InvalidArgumentException(sprintf('User identified by "%s" username does not exist.', $username));
+            throw new InvalidArgumentException(sprintf('User identified by "%s" username does not exist.', $username));
         }
 
         return $user;
     }
 
-    /**
-     * @return Request
-     */
-    private function getRequest()
+    private function getRequest(): ?Request
     {
         return $this->requestStack->getCurrentRequest();
     }

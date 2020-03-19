@@ -11,13 +11,13 @@
 
 namespace FOS\UserBundle\Form\DataTransformer;
 
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
- * Transforms between a UserInterface instance and a username string.
+ * Transforms between a User instance and a username string.
  *
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  */
@@ -37,40 +37,40 @@ class UserToUsernameTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms a UserInterface instance into a username string.
+     * Transforms a User instance into a username string.
      *
-     * @param UserInterface|null $value UserInterface instance
+     * @param User|null $value User instance
      *
      * @return string|null Username
      *
-     * @throws UnexpectedTypeException if the given value is not a UserInterface instance
+     * @throws UnexpectedTypeException if the given value is not a User instance
      */
-    public function transform($value)
+    public function transform($value): ?string
     {
         if (null === $value) {
-            return;
+            return null;
         }
 
-        if (!$value instanceof UserInterface) {
-            throw new UnexpectedTypeException($value, 'FOS\UserBundle\Model\UserInterface');
+        if (!$value instanceof User) {
+            throw new UnexpectedTypeException($value, 'FOS\UserBundle\Model\User');
         }
 
         return $value->getUsername();
     }
 
     /**
-     * Transforms a username string into a UserInterface instance.
+     * Transforms a username string into a User instance.
      *
      * @param string $value Username
      *
-     * @return UserInterface the corresponding UserInterface instance
+     * @return User the corresponding User instance
      *
      * @throws UnexpectedTypeException if the given value is not a string
      */
-    public function reverseTransform($value)
+    public function reverseTransform($value): ?User
     {
         if (null === $value || '' === $value) {
-            return;
+            return null;
         }
 
         if (!is_string($value)) {

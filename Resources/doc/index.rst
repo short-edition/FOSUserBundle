@@ -261,7 +261,7 @@ in your application:
     # app/config/security.yml
     security:
         encoders:
-            FOS\UserBundle\Model\UserInterface: bcrypt
+            FOS\UserBundle\Model\User: bcrypt
 
         role_hierarchy:
             ROLE_ADMIN:       ROLE_USER

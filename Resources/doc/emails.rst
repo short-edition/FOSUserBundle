@@ -183,7 +183,7 @@ which is listed below.
 
     namespace FOS\UserBundle\Mailer;
 
-    use FOS\UserBundle\Model\UserInterface;
+    use FOS\UserBundle\Model\User;
 
     /**
      * @author Thibault Duplessis <thibault.duplessis@gmail.com>
@@ -193,16 +193,16 @@ which is listed below.
         /**
          * Send an email to a user to confirm the account creation
          *
-         * @param UserInterface $user
+         * @param User $user
          */
-        function sendConfirmationEmailMessage(UserInterface $user);
+        function sendConfirmationEmailMessage(User $user);
 
         /**
          * Send an email to a user to confirm the password reset
          *
-         * @param UserInterface $user
+         * @param User $user
          */
-        function sendResettingEmailMessage(UserInterface $user);
+        function sendResettingEmailMessage(User $user);
     }
 
 After you have implemented your custom mailer class and defined it as a service,

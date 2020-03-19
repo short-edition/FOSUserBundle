@@ -11,6 +11,7 @@
 
 namespace FOS\UserBundle\DependencyInjection\Compiler;
 
+use LogicException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Flex\Recipe;
@@ -25,7 +26,7 @@ class CheckForSessionPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->has('fos_user.session') && !$container->has('session')) {
             $message = 'FOSUserBundle requires the "session" service to be available.';
@@ -34,7 +35,7 @@ class CheckForSessionPass implements CompilerPassInterface
                 $message .= ' Uncomment the "session" section in "config/packages/framework.yaml" to activate it.';
             }
 
-            throw new \LogicException($message);
+            throw new LogicException($message);
         }
     }
 }
