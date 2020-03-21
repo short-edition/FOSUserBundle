@@ -261,7 +261,7 @@ abstract class User implements UserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfirmationToken(): string
+    public function getConfirmationToken(): ?string
     {
         return $this->confirmationToken;
     }
