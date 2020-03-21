@@ -35,7 +35,7 @@ interface UserInterface extends Serializable, BaseUserInterface, EquatableInterf
      *
      * @return static
      */
-    public function setUsername(string $username);
+    public function setUsername(?string $username);
 
     /**
      * Gets the canonical username in search and sort queries.

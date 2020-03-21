@@ -344,7 +344,7 @@ abstract class User implements UserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setUsername(string $username)
+    public function setUsername(?string $username)
     {
         $this->username = $username;
 
