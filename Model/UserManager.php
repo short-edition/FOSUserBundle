@@ -75,7 +75,7 @@ abstract class UserManager implements UserManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function findUserByConfirmationToken(int $token): ?UserInterface
+    public function findUserByConfirmationToken(string $token): ?UserInterface
     {
         return $this->findUserBy(['confirmationToken' => $token]);
     }

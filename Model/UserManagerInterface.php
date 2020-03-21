@@ -59,7 +59,7 @@ interface UserManagerInterface
     /**
      * Finds a user by its confirmationToken.
      */
-    public function findUserByConfirmationToken(int $token): ?UserInterface;
+    public function findUserByConfirmationToken(string $token): ?UserInterface;
 
     /**
      * Returns a collection with all user instances.
