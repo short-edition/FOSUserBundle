@@ -11,8 +11,6 @@
 
 namespace FOS\UserBundle\Model;
 
-use Traversable;
-
 /**
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
@@ -23,7 +21,7 @@ interface GroupableInterface
     /**
      * Gets the groups granted to the user.
      */
-    public function getGroups(): Traversable;
+    public function getGroups(): array;
 
     /**
      * Gets the name of the groups which includes the user.

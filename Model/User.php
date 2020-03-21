@@ -13,7 +13,6 @@ namespace FOS\UserBundle\Model;
 
 use DateTime;
 use Doctrine\Common\Collections\Collection;
-use Traversable;
 
 /**
  * Storage agnostic user object.
@@ -271,11 +270,13 @@ abstract class User implements UserInterface, GroupableInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $primaryRoles = $this->roles;
 
+        $roles = [];
         foreach ($this->getGroups() as $group) {
-            $roles = array_merge($roles, $group->getRoles());
+            $roles[] = $group->getRoles();
         }
+        $roles = array_merge($primaryRoles, ...$roles);
 
         // we need to make sure to have at least one role
         $roles[] = static::ROLE_DEFAULT;
@@ -499,7 +500,7 @@ abstract class User implements UserInterface, GroupableInterface
     /**
      * @return GroupInterface[] return array of GroupInterface
      */
-    public function getGroups(): Traversable
+    public function getGroups(): array
     {
         return $this->groups ?: $this->groups = [];
     }
