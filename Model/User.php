@@ -354,7 +354,7 @@ abstract class User implements UserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setUsernameCanonical(string $usernameCanonical)
+    public function setUsernameCanonical(?string $usernameCanonical)
     {
         $this->usernameCanonical = $usernameCanonical;
 
@@ -374,7 +374,7 @@ abstract class User implements UserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setEmail(string $email)
+    public function setEmail(?string $email)
     {
         $this->email = $email;
 
@@ -384,7 +384,7 @@ abstract class User implements UserInterface, GroupableInterface
     /**
      * {@inheritdoc}
      */
-    public function setEmailCanonical(string $emailCanonical)
+    public function setEmailCanonical(?string $emailCanonical)
     {
         $this->emailCanonical = $emailCanonical;
 

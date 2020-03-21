@@ -47,7 +47,7 @@ interface UserInterface extends Serializable, BaseUserInterface, EquatableInterf
      *
      * @return static
      */
-    public function setUsernameCanonical(string $usernameCanonical);
+    public function setUsernameCanonical(?string $usernameCanonical);
 
     /**
      * @return static
@@ -64,7 +64,7 @@ interface UserInterface extends Serializable, BaseUserInterface, EquatableInterf
      *
      * @return static
      */
-    public function setEmail(string $email);
+    public function setEmail(?string $email);
 
     /**
      * Gets the canonical email in search and sort queries.
@@ -76,7 +76,7 @@ interface UserInterface extends Serializable, BaseUserInterface, EquatableInterf
      *
      * @return static
      */
-    public function setEmailCanonical(string $emailCanonical);
+    public function setEmailCanonical(?string $emailCanonical);
 
     /**
      * Gets the plain password.
