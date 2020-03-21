@@ -500,7 +500,7 @@ abstract class User implements UserInterface, GroupableInterface
     /**
      * @return GroupInterface[] return array of GroupInterface
      */
-    public function getGroups(): array
+    public function getGroups(): Collection
     {
         return $this->groups ?: $this->groups = [];
     }

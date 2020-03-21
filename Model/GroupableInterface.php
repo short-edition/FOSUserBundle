@@ -11,6 +11,8 @@
 
 namespace FOS\UserBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
+
 /**
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
@@ -21,7 +23,7 @@ interface GroupableInterface
     /**
      * Gets the groups granted to the user.
      */
-    public function getGroups(): array;
+    public function getGroups(): Collection;
 
     /**
      * Gets the name of the groups which includes the user.
