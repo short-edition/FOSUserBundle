@@ -31,6 +31,10 @@ class CanonicalFieldsUpdater
 
     public function updateCanonicalFields(UserInterface $user): void
     {
+        if (!$user->getUsername()) {
+            return;
+        }
+        
         $user->setUsernameCanonical($this->canonicalizeUsername($user->getUsername()));
         $user->setEmailCanonical($this->canonicalizeEmail($user->getEmail()));
     }
