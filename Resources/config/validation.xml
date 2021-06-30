@@ -73,6 +73,16 @@
                     <value>ChangePassword</value>
                 </option>
             </constraint>
+            <constraint name="Regex">
+                <option name="pattern">(?=.*[a-z])(?=.*[A-Z])(?=.*\W)</option>
+                <option name="message">fos_user.password.short</option>
+                <option name="groups">
+                    <value>Registration</value>
+                    <value>Profile</value>
+                    <value>ResetPassword</value>
+                    <value>ChangePassword</value>
+                </option>
+            </constraint>
         </property>
     </class>
 
