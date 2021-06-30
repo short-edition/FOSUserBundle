@@ -13,6 +13,7 @@ fos_user:
     password:
         blank: 'Please enter a password.'
         short: 'The password is too short.'
+        special_char: 'The password must contain 1 uppercase letter, 1 lowercase letter and 1 special character.'
         mismatch: 'The entered passwords don''t match.'
     new_password:
         blank: 'Please enter a new password.'
