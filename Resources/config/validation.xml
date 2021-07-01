@@ -74,7 +74,7 @@
                 </option>
             </constraint>
             <constraint name="Regex">
-                <option name="pattern">.*?([a-z]{1,}).*([A-Z]{1,}).*(\W{1,}).*?</option>
+                <option name="pattern">^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*$</option>
                 <option name="message">fos_user.password.special_char</option>
                 <option name="groups">
                     <value>Registration</value>
