@@ -22,6 +22,7 @@ use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -146,6 +147,7 @@ class ResettingController extends AbstractController
         $form->setData($user);
 
         $form->handleRequest($request);
+        $this->cleanFormRequest($form);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event = new FormEvent($form, $request);
@@ -167,5 +169,9 @@ class ResettingController extends AbstractController
             'token' => $token,
             'form' => $form->createView(),
         ]);
+    }
+    
+    protected function cleanFormRequest(FormInterface $form): void
+    {
     }
 }
